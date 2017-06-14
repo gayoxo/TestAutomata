@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Stack;
 
 import fdi.ucm.es.model.DocumentsV;
@@ -19,13 +17,17 @@ import fdi.ucm.es.model.DocumentsV;
  *
  */
 public class DFAManager {
+	
+
+	private Long idco;
 
 	public DFAManager(List<DocumentsV> documentos) {
 
+	idco=1l;
 	Stack<StateDFA> PilaProcesar = new Stack<StateDFA>();
-	Queue<StateDFA> Viables =new PriorityQueue<StateDFA>();
-	Long idco=1l;
+	HashMap<Integer,List<StateDFA>> Total =new HashMap<Integer,List<StateDFA>>();
 	StateDFA root=new StateDFA(idco.longValue());
+//	System.out.println("Creado State: "+idco.longValue());
 	root.setDocumentosIn(documentos);
 	idco++;
 	PilaProcesar.push(root);
@@ -42,6 +44,11 @@ public class DFAManager {
 	            else
 	            {
 	            	StateDFA Destino=null;
+	            	List<StateDFA> Viables = Total.get(new Integer(value.size()));
+	            	
+	            	if (Viables==null)
+	            		Viables=new ArrayList<StateDFA>();
+	            	
 	            	for (StateDFA statepos : Viables) {
 						if (check(statepos,value))
 						{
@@ -52,10 +59,19 @@ public class DFAManager {
 	            	
 	            	if (Destino==null)
 	            		{
+	            	//	System.out.println("Creado State: "+idco.longValue());
 	            		Destino=new StateDFA(idco.longValue());
 	            		idco++;
-	            		Destino.setDocumentosIn(documentos);
-	            		//AQUI SE METE
+	            		Destino.setDocumentosIn(value);
+	            		
+	            		List<StateDFA> ViablesN = Total.get(new Integer(value.size()));
+		            	
+		            	if (ViablesN==null)
+		            		ViablesN=new ArrayList<StateDFA>();
+		            	
+		            	ViablesN.add(Destino);
+		            	Total.put(new Integer(value.size()), ViablesN);
+		            	PilaProcesar.add(Destino);
 	            		}
 	            		
 	            		Actual.getTransicion().put(key, Destino);
@@ -100,5 +116,15 @@ public class DFAManager {
 		}
 		return Salida;
 	}
+
+	public Long getIdco() {
+		return idco;
+	}
+
+	public void setIdco(Long idco) {
+		this.idco = idco;
+	}
+	
+	
 
 }

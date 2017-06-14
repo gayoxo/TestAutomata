@@ -14,6 +14,7 @@ import java.util.List;
 
 import fdi.ucm.es.dfa.DFAManager;
 import fdi.ucm.es.model.DocumentsV;
+import fdi.ucm.es.nfa.NFAManager;
 
 /**
  * Clase principal, arranca el sistema, carga el archivo y produce el resultado.
@@ -47,12 +48,23 @@ public class Principal {
 	 */
 	private static void Simulation(List<DocumentsV> documentos) {
 
-		long Start = System.nanoTime();
-//		DFAManager DFAObject = 
+		long StartDFA = System.nanoTime();
+		DFAManager DFAObject = 
 				new DFAManager(documentos);
-		long End = System.nanoTime();
-		long Diferencia = End-Start;
-		System.out.println("Creation time->"+Diferencia);
+		long EndDFA = System.nanoTime();
+		long DiferenciaDFA = EndDFA-StartDFA;
+		
+		System.out.println("DFA->"+DFAObject.getIdco());
+		
+		long StartNFA = System.nanoTime();
+		NFAManager NFAObject = 
+				new NFAManager(documentos);
+		long EndNFA = System.nanoTime();
+		long DiferenciaNFA = EndNFA-StartNFA;
+		
+		System.out.println("NFA->"+NFAObject.getIdco());
+		
+		System.out.println("Creation time    DFA->"+DiferenciaDFA+" NFA->"+DiferenciaNFA);
 		
 	}
 
