@@ -92,6 +92,7 @@ public class Principal {
 						e.printStackTrace();
 					} 
 	             }
+	             Salida.add(DV);
 	            }
 			
 		} catch (Exception e) {

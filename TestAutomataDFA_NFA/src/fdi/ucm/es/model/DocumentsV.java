@@ -4,6 +4,7 @@
 package fdi.ucm.es.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Joaquin Gayoso Cabada
@@ -44,6 +45,9 @@ public class DocumentsV {
 	
 	
 	
-	
+	@Override
+	public String toString() {
+		return "{ID:"+Id+","+"Att:"+Arrays.toString(Att.toArray())+"}";
+	}
 
 }
