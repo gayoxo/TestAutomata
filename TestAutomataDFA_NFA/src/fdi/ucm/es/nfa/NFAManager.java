@@ -24,7 +24,7 @@ public class NFAManager {
 	public NFAManager(List<DocumentsV> documentos) {
 		idco=1l;
 		Stack<StateNFA> PilaProcesar = new Stack<StateNFA>();
-		StateNFA root=new StateNFA(idco.longValue());
+		StateNFA root=new StateNFA(idco.longValue(),null);
 //		System.out.println("Creado State: "+idco.longValue());
 		root.setDocumentosIn(documentos);
 		idco++;
@@ -45,6 +45,9 @@ public class NFAManager {
 		            	listaViables.add(name);
 				}
 				
+				ProcesaBucle(Actual);
+
+				
 				HashSet<DocumentsV> procesados=new HashSet<DocumentsV>();
 				
 				Collections.shuffle(listaViables);
@@ -61,7 +64,7 @@ public class NFAManager {
 		            value.removeAll(procesados);
 		            if (!value.isEmpty())
 		            	{
-		            	StateNFA Destino = new StateNFA(idco.longValue());
+		            	StateNFA Destino = new StateNFA(idco.longValue(),Actual);
 	            		idco++;
 	            		Destino.setDocumentosIn(value);
 
@@ -69,7 +72,15 @@ public class NFAManager {
 	            		
 		            	procesados.addAll(value);
 	            		
-	            		Actual.getTransicion().put(key, Destino);
+		            	
+		            	List<StateNFA> ListaAc = Actual.getTransicion().get(key);
+		            	
+		            	if (ListaAc==null)
+		            		ListaAc=new ArrayList<StateNFA>();
+		            	
+		            	ListaAc.add(Destino);
+		            	
+	            		Actual.getTransicion().put(key, ListaAc);
 		            	}
 					
 				}
@@ -79,6 +90,31 @@ public class NFAManager {
 			}
 		}
 	
+
+	private void ProcesaBucle(StateNFA actual) {
+		StateNFA procesando = actual.getPadre();
+		List<Long> bucle = actual.getBucle();
+		while (procesando!=null)
+		{
+			for (Long long1 : bucle) {
+				if (!procesando.getBucle().contains(long1))
+					{
+					List<StateNFA> transicionAc = procesando.getTransicion().get(long1);
+					
+					if (transicionAc==null)
+						transicionAc=new ArrayList<StateNFA>();
+						
+					if (!transicionAc.contains(actual))
+						{
+						transicionAc.add(actual);
+						procesando.getTransicion().put(long1, transicionAc);
+						}
+					}
+			}
+			procesando=procesando.getPadre();
+		}
+	}
+
 
 	/**
 	 * Genera el indice inverso
