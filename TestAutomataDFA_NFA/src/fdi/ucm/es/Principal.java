@@ -72,14 +72,17 @@ public class Principal {
 			
 			ArrayList<Long> NavegacionGenerada=null;
 			
+			DFAObject.setNavegacionGenerada(NavegacionGenerada);
+			
 			long StartDFAN = System.nanoTime();
-			NavegacionGenerada=DFAObject.Navega(NavegacionGenerada);
+			NavegacionGenerada=DFAObject.Navega();
 			long EndDFAN = System.nanoTime();
 			long DiferenciaDFAN = EndDFAN-StartDFAN;
 
+			NFAObject.setNavegacionGenerada(NavegacionGenerada);
 			
 			long StartNFAN = System.nanoTime();
-			NavegacionGenerada=NFAObject.Navega(NavegacionGenerada);
+			NavegacionGenerada=NFAObject.Navega();
 			long EndNFAN = System.nanoTime();
 			long DiferenciaNFAN = EndNFAN-StartNFAN;
 			

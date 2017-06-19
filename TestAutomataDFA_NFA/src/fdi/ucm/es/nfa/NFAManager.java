@@ -20,6 +20,7 @@ import fdi.ucm.es.model.DocumentsV;
 public class NFAManager {
 
 	private Long idco;
+	private ArrayList<Long> NavegacionGenerada;
 	
 	public NFAManager(List<DocumentsV> documentos) {
 		idco=1l;
@@ -147,9 +148,15 @@ public class NFAManager {
 	}
 
 
-	public ArrayList<Long> Navega(ArrayList<Long> navegacionGenerada) {
+	public ArrayList<Long> Navega() {
 		ArrayList<Long> Salida=new ArrayList<Long>();
 		return Salida;
+		
+	}
+	
+	
+	public void setNavegacionGenerada(ArrayList<Long> navegacionGenerada) {
+		NavegacionGenerada=navegacionGenerada;
 		
 	}
 

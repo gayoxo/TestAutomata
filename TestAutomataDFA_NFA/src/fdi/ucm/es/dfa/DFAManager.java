@@ -20,6 +20,7 @@ public class DFAManager {
 	
 
 	private Long idco;
+	private ArrayList<Long> NavegacionGenerada;
 
 	public DFAManager(List<DocumentsV> documentos) {
 
@@ -125,9 +126,14 @@ public class DFAManager {
 		this.idco = idco;
 	}
 
-	public ArrayList<Long> Navega(ArrayList<Long> navegacionGenerada) {
+	public ArrayList<Long> Navega() {
 		ArrayList<Long> Salida=new ArrayList<Long>();
 		return Salida;
+		
+	}
+
+	public void setNavegacionGenerada(ArrayList<Long> navegacionGenerada) {
+		NavegacionGenerada=navegacionGenerada;
 		
 	}
 	
