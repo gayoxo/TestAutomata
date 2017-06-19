@@ -146,4 +146,11 @@ public class NFAManager {
 		this.idco = idco;
 	}
 
+
+	public ArrayList<Long> Navega(ArrayList<Long> navegacionGenerada) {
+		ArrayList<Long> Salida=new ArrayList<Long>();
+		return Salida;
+		
+	}
+
 }

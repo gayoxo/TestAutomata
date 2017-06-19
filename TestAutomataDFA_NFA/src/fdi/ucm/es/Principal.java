@@ -66,6 +66,27 @@ public class Principal {
 		
 		System.out.println("Creation time    DFA->"+DiferenciaDFA+" NFA->"+DiferenciaNFA);
 		
+		int Navegaciones = documentos.size()*100;
+		
+		for (int i = 0; i < Navegaciones; i++) {
+			
+			ArrayList<Long> NavegacionGenerada=null;
+			
+			long StartDFAN = System.nanoTime();
+			NavegacionGenerada=DFAObject.Navega(NavegacionGenerada);
+			long EndDFAN = System.nanoTime();
+			long DiferenciaDFAN = EndDFAN-StartDFAN;
+
+			
+			long StartNFAN = System.nanoTime();
+			NavegacionGenerada=NFAObject.Navega(NavegacionGenerada);
+			long EndNFAN = System.nanoTime();
+			long DiferenciaNFAN = EndNFAN-StartNFAN;
+			
+			System.out.println("Browsing->("+i+")   DFA->"+DiferenciaDFAN+" NFA->"+DiferenciaNFAN);
+		}
+		
+		
 	}
 
 	/**
