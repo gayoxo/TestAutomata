@@ -56,14 +56,19 @@ public class Principal {
 
 		
 		HSSFWorkbook libro = new HSSFWorkbook();
-		HSSFSheet hoja = libro.createSheet();
+		HSSFSheet Construcion = libro.createSheet("Construccion");
 		int filaI=0;
-		HSSFRow fila = hoja.createRow(filaI);
+		HSSFRow fila = Construcion.createRow(filaI);
 		filaI++;
-		HSSFCell celda0 = fila.createCell(0);
+		
+		HSSFCell celda00 = fila.createCell(0);
+		celda00.setCellValue("#");
+		
+		
+		HSSFCell celda0 = fila.createCell(1);
 		celda0.setCellValue("DFA");
 		
-		HSSFCell celda1 = fila.createCell(1);
+		HSSFCell celda1 = fila.createCell(2);
 		celda1.setCellValue("NFA");
 		
 		
@@ -100,19 +105,25 @@ public class Principal {
 			if (i<TiemposNFA.size())
 				NFACT = TiemposNFA.get(i);
 			
-			HSSFRow filaN = hoja.createRow(filaI);
+			HSSFRow filaN = Construcion.createRow(filaI);
 			filaI++;
-			HSSFCell celda0N = filaN.createCell(0);
-			celda0N.setCellValue(DFACT.toString());
 			
-			HSSFCell celda1N = filaN.createCell(1);
-			celda1N.setCellValue(NFACT.toString());
+			
+			HSSFCell celda00N = filaN.createCell(0);
+			celda00N.setCellValue(i);
+			
+			
+			HSSFCell celda0N = filaN.createCell(1);
+			celda0N.setCellValue(DFACT);
+			
+			HSSFCell celda1N = filaN.createCell(2);
+			celda1N.setCellValue(NFACT);
 			
 		
 		}
 		
 		
-		int Navegaciones = documentos.size()*10;
+		int Navegaciones = documentos.size()*0;
 		
 		for (int i = 0; i < Navegaciones; i++) {
 			
