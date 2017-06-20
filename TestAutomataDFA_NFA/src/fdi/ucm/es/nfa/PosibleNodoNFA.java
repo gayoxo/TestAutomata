@@ -1,36 +1,36 @@
 /**
  * 
  */
-package fdi.ucm.es.model;
+package fdi.ucm.es.nfa;
 
-import fdi.ucm.es.dfa.StateDFA;
+import java.util.List;
 
 /**
  * @author gayoxo
  *
  */
-public class PosibleNodo implements Comparable<PosibleNodo>{
+public class PosibleNodoNFA implements Comparable<PosibleNodoNFA>{
 
 	private int numeroElementos;
 	private Long longTransicion;
-	private StateDFA estadoSiguiente;
+	private List<StateNFA> estadoSiguiente;
 
 	
 	@SuppressWarnings("unused")
-	private PosibleNodo() {
+	private PosibleNodoNFA() {
 		this.numeroElementos=0;
 		this.longTransicion=0l;
 		this.estadoSiguiente=null;
 	}
 	
-	public PosibleNodo(int nelements, Long transicion, StateDFA estadoSiguiente) {
+	public PosibleNodoNFA(int nelements, Long transicion, List<StateNFA> estadoSiguiente) {
 		this.numeroElementos=nelements;
 		this.longTransicion=transicion;
 		this.estadoSiguiente=estadoSiguiente;
 	}
 
 	@Override
-	public int compareTo(PosibleNodo o) {
+	public int compareTo(PosibleNodoNFA o) {
 		if (numeroElementos < o.getNumeroElementos()) {
             return 1;
         } else if (numeroElementos > o.getNumeroElementos()) {
@@ -56,11 +56,11 @@ public class PosibleNodo implements Comparable<PosibleNodo>{
 		this.longTransicion = longTransicion;
 	}
 
-	public StateDFA getEstadoSiguiente() {
+	public List<StateNFA> getEstadoSiguiente() {
 		return estadoSiguiente;
 	}
 
-	public void setEstadoSiguiente(StateDFA estadoSiguiente) {
+	public void setEstadoSiguiente(List<StateNFA> estadoSiguiente) {
 		this.estadoSiguiente = estadoSiguiente;
 	}
 	

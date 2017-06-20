@@ -72,7 +72,7 @@ public class Principal {
 		
 		System.out.println("Creation time    DFA->"+DiferenciaDFA+" NFA->"+DiferenciaNFA);
 		
-		int Navegaciones = documentos.size()*100;
+		int Navegaciones = documentos.size()*10;
 		
 		for (int i = 0; i < Navegaciones; i++) {
 			
@@ -84,6 +84,8 @@ public class Principal {
 			NavegacionGenerada=DFAObject.Navega();
 			long EndDFAN = System.nanoTime();
 			long DiferenciaDFAN = EndDFAN-StartDFAN;
+			
+			System.out.println(Arrays.toString(NavegacionGenerada.toArray()));
 
 			NFAObject.setNavegacionGenerada(NavegacionGenerada);
 			

@@ -14,7 +14,6 @@ import java.util.Random;
 import java.util.Stack;
 
 import fdi.ucm.es.model.DocumentsV;
-import fdi.ucm.es.model.PosibleNodo;
 
 /**
  * @author Joaquin Gayoso Cabada
@@ -24,7 +23,6 @@ public class DFAManager {
 	
 
 	private Long idco;
-	private ArrayList<Long> NavegacionGenerada;
 	private StateDFA root;
 
 	public DFAManager(List<DocumentsV> documentos, List<Long> tiemposCreacion) {
@@ -143,17 +141,25 @@ public class DFAManager {
 	public ArrayList<Long> Navega() {
 		ArrayList<Long> Salida=new ArrayList<Long>();
 		
-		Queue<PosibleNodo> cola = new PriorityQueue<PosibleNodo>();
+		Navega(root,Salida);
 		
-		for (Entry<Long, StateDFA> pieza : root.getTransicion().entrySet()) {
-			ArrayList<DocumentsV> Total=calculaTotal(pieza.getValue());
-			PosibleNodo p=new PosibleNodo(Total.size(),pieza.getKey(),pieza.getValue());
+		return Salida;
+		
+	}
+
+	private void Navega(StateDFA estadoSiguiente, ArrayList<Long> Salida) {
+Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
+		
+		for (Entry<Long, StateDFA> pieza : estadoSiguiente.getTransicion().entrySet()) {
+			HashSet<StateDFA> procesed=new HashSet<StateDFA>();
+			List<DocumentsV> Total=calculaTotal(pieza.getValue(),procesed);
+			PosibleNodoDFA p=new PosibleNodoDFA(Total.size(),pieza.getKey(),pieza.getValue());
 			cola.add(p);
 		}
 		
 		
 		boolean selecionada=false;
-		PosibleNodo seleccion=null;
+		PosibleNodoDFA seleccion=null;
 		
 		Random R=new Random();
 		
@@ -161,24 +167,35 @@ public class DFAManager {
 		{
 			seleccion=cola.remove();
 			selecionada=R.nextBoolean();
+			if (selecionada)
+				{
+					Salida.add(seleccion.getLongTransicion());
+					Navega(seleccion.getEstadoSiguiente(),Salida);
+				}
 			
 		}
 		
-		
-		
-		
-		
-		return Salida;
-		
 	}
 
-	private ArrayList<DocumentsV> calculaTotal(StateDFA value) {
-		// TODO Auto-generated method stub
-		return null;
+	private List<DocumentsV> calculaTotal(StateDFA value,HashSet<StateDFA> procesed) {
+		ArrayList<DocumentsV> Salida=new ArrayList<DocumentsV>();
+		Salida.addAll(value.getDocumentosIn());
+		procesed.add(value);
+		for (Entry<Long, StateDFA> entryHijo : value.getTransicion().entrySet()) {
+			if (!procesed.contains(entryHijo.getValue()))
+				{
+				List<DocumentsV> Posible = calculaTotal(entryHijo.getValue(),procesed);	
+				for (DocumentsV documentsV : Posible)
+					if (!Salida.contains(documentsV))
+						Salida.add(documentsV);
+				
+				}
+		}
+		return Salida;
 	}
 
 	public void setNavegacionGenerada(ArrayList<Long> navegacionGenerada) {
-		NavegacionGenerada=navegacionGenerada;
+		//No hace nada
 		
 	}
 	

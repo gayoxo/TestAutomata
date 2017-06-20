@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Random;
 import java.util.Stack;
 import java.util.Map.Entry;
 
@@ -21,6 +24,8 @@ public class NFAManager {
 
 	private Long idco;
 	private ArrayList<Long> NavegacionGenerada;
+	private StateNFA root;
+	private int navegacion_actual;
 	
 	public NFAManager(List<DocumentsV> documentos, List<Long> tiemposNFA) {
 		
@@ -28,7 +33,7 @@ public class NFAManager {
 		
 		idco=1l;
 		Stack<StateNFA> PilaProcesar = new Stack<StateNFA>();
-		StateNFA root=new StateNFA(idco.longValue(),null);
+		root=new StateNFA(idco.longValue(),null);
 		long EndNFA = System.nanoTime();
 		long DiferenciaNFA = EndNFA-StartNFA;
 		tiemposNFA.add(DiferenciaNFA);
@@ -162,14 +167,128 @@ public class NFAManager {
 
 	public ArrayList<Long> Navega() {
 		ArrayList<Long> Salida=new ArrayList<Long>();
+		
+		navegacion_actual=0;
+		
+		EstadoNavegacionNFA ES=new EstadoNavegacionNFA(root);
+		Navega(ES,Salida);
+		
 		return Salida;
 		
 	}
+	
+	private void Navega(EstadoNavegacionNFA estadoSiguiente, ArrayList<Long> Salida) {
+		Queue<PosibleNodoNFA> cola = new PriorityQueue<PosibleNodoNFA>();
+				
+		for (StateNFA posibleNodoNFA : estadoSiguiente.getActual()) {
+			for (Entry<Long, List<StateNFA>> pieza : posibleNodoNFA.getTransicion().entrySet()) {
+				
+				HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
+				for (StateNFA posibleNodo : pieza.getValue()) {
+					Total.addAll(calculaTotal(posibleNodo));
+				}
+				
+				PosibleNodoNFA p=new PosibleNodoNFA(Total.size(),pieza.getKey(),pieza.getValue());
+				cola.add(p);
+				
+				//PROCESAR BUCLES
+				
+			}
+		}
+		
+		
+		HashSet<Long> PosiblesBucles=new HashSet<Long>();
+		for (StateNFA posibleStatebucle : estadoSiguiente.getActual())
+			PosiblesBucles.addAll(posibleStatebucle.getBucle());
+
+		
+		
+		for (Long long1 : PosiblesBucles) {
+			List<StateNFA> reduce=new ArrayList<StateNFA>();
+			for (StateNFA estadovalido : estadoSiguiente.getActual())
+				if (estadovalido.getBucle().contains(long1))
+					reduce.add(estadovalido);
+			
+			if (reduce.size()<estadoSiguiente.getActual().size())
+			{
+				HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
+				for (StateNFA posibleNodo : reduce) {
+					Total.addAll(calculaTotal(posibleNodo));
+				}
+				
+				PosibleNodoNFA p=new PosibleNodoNFA(Total.size(),long1,reduce);
+				cola.add(p);
+			}
+				
+		}		
+				
+				
+				boolean selecionada=false;
+				PosibleNodoNFA seleccion=null;
+				
+				Random R=new Random();
+				
+				while(!selecionada&&!cola.isEmpty())
+				{
+					seleccion=cola.remove();
+					selecionada=R.nextBoolean();
+					if (selecionada)
+							Salida.add(seleccion.getLongTransicion());
+								
+					
+				}
+				
+				
+				if (navegacion_actual<NavegacionGenerada.size())
+				{
+				Long transicionA=NavegacionGenerada.get(navegacion_actual);
+				navegacion_actual++;
+				HashSet<StateNFA> next=new HashSet<StateNFA>();
+				
+					for (StateNFA posibleNodoNFA : estadoSiguiente.getActual()) {
+						ArrayList<StateNFA> sucession=new ArrayList<StateNFA>();
+						if (posibleNodoNFA.getBucle().contains(transicionA))
+							sucession.add(posibleNodoNFA);
+						else
+							{
+							List<StateNFA> haciaDelante = posibleNodoNFA.getTransicion().get(transicionA);
+							if (haciaDelante!=null)
+								sucession.addAll(haciaDelante);
+							}
+						
+						
+							next.addAll(sucession);
+						
+					}
+				
+					estadoSiguiente.setActual(next);
+					Navega(estadoSiguiente, Salida);
+					
+				}
+				
+			}
 	
 	
 	public void setNavegacionGenerada(ArrayList<Long> navegacionGenerada) {
 		NavegacionGenerada=navegacionGenerada;
 		
+	}
+	
+	private List<DocumentsV> calculaTotal(StateNFA value) {
+		ArrayList<DocumentsV> Salida=new ArrayList<DocumentsV>();
+		Salida.addAll(value.getDocumentosIn());
+		for (Entry<Long, List<StateNFA>> entryHijo : value.getTransicion().entrySet()) {
+			for (StateNFA stater : entryHijo.getValue()) {
+
+				List<DocumentsV> Posible = calculaTotal(stater);	
+				for (DocumentsV documentsV : Posible)
+					if (!Salida.contains(documentsV))
+						Salida.add(documentsV);
+	
+			}
+			
+		}
+		return Salida;
 	}
 
 }
