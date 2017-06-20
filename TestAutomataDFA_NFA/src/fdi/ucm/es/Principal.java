@@ -5,12 +5,18 @@ package fdi.ucm.es;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import fdi.ucm.es.dfa.DFAManager;
 import fdi.ucm.es.model.DocumentsV;
@@ -49,6 +55,18 @@ public class Principal {
 	private static void Simulation(List<DocumentsV> documentos) {
 
 		
+		HSSFWorkbook libro = new HSSFWorkbook();
+		HSSFSheet hoja = libro.createSheet();
+		int filaI=0;
+		HSSFRow fila = hoja.createRow(filaI);
+		filaI++;
+		HSSFCell celda0 = fila.createCell(0);
+		celda0.setCellValue("DFA");
+		
+		HSSFCell celda1 = fila.createCell(1);
+		celda1.setCellValue("NFA");
+		
+		
 		List<Long> TiemposDFA=new ArrayList<Long>();
 		
 		long StartDFA = System.nanoTime();
@@ -71,6 +89,28 @@ public class Principal {
 		System.out.println("NFA->"+NFAObject.getIdco());
 		
 		System.out.println("Creation time    DFA->"+DiferenciaDFA+" NFA->"+DiferenciaNFA);
+		
+		Long DFACT=0l;
+		Long NFACT=0l;
+		
+		for (int i = 0; i < TiemposDFA.size(); i++) {
+			
+			DFACT = TiemposDFA.get(i);
+			
+			if (i<TiemposNFA.size())
+				NFACT = TiemposNFA.get(i);
+			
+			HSSFRow filaN = hoja.createRow(filaI);
+			filaI++;
+			HSSFCell celda0N = filaN.createCell(0);
+			celda0N.setCellValue(DFACT.toString());
+			
+			HSSFCell celda1N = filaN.createCell(1);
+			celda1N.setCellValue(NFACT.toString());
+			
+		
+		}
+		
 		
 		int Navegaciones = documentos.size()*10;
 		
@@ -96,6 +136,15 @@ public class Principal {
 			
 			System.out.println("Browsing->("+i+")   DFA->"+DiferenciaDFAN+" NFA->"+DiferenciaNFAN);
 		}
+		
+		
+		try {
+			   FileOutputStream elFichero = new FileOutputStream(System.nanoTime()+".xls");
+			   libro.write(elFichero);
+			   elFichero.close();
+			} catch (Exception e) {
+			   e.printStackTrace();
+			}
 		
 		
 	}
