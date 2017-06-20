@@ -48,17 +48,23 @@ public class Principal {
 	 */
 	private static void Simulation(List<DocumentsV> documentos) {
 
+		
+		List<Long> TiemposDFA=new ArrayList<Long>();
+		
 		long StartDFA = System.nanoTime();
 		DFAManager DFAObject = 
-				new DFAManager(documentos);
+				new DFAManager(documentos,TiemposDFA);
 		long EndDFA = System.nanoTime();
 		long DiferenciaDFA = EndDFA-StartDFA;
 		
 		System.out.println("DFA->"+DFAObject.getIdco());
 		
+		
+		List<Long> TiemposNFA=new ArrayList<Long>();
+		
 		long StartNFA = System.nanoTime();
 		NFAManager NFAObject = 
-				new NFAManager(documentos);
+				new NFAManager(documentos,TiemposNFA);
 		long EndNFA = System.nanoTime();
 		long DiferenciaNFA = EndNFA-StartNFA;
 		

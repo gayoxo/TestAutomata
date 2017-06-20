@@ -8,9 +8,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Random;
 import java.util.Stack;
 
 import fdi.ucm.es.model.DocumentsV;
+import fdi.ucm.es.model.PosibleNodo;
 
 /**
  * @author Joaquin Gayoso Cabada
@@ -21,13 +25,19 @@ public class DFAManager {
 
 	private Long idco;
 	private ArrayList<Long> NavegacionGenerada;
+	private StateDFA root;
 
-	public DFAManager(List<DocumentsV> documentos) {
+	public DFAManager(List<DocumentsV> documentos, List<Long> tiemposCreacion) {
 
+	long StartDFA = System.nanoTime();	
+		
 	idco=1l;
 	Stack<StateDFA> PilaProcesar = new Stack<StateDFA>();
 	HashMap<Integer,List<StateDFA>> Total =new HashMap<Integer,List<StateDFA>>();
-	StateDFA root=new StateDFA(idco.longValue());
+	root=new StateDFA(idco.longValue());
+	long EndDFA = System.nanoTime();
+	long DiferenciaDFA = EndDFA-StartDFA;
+	tiemposCreacion.add(DiferenciaDFA);
 //	System.out.println("Creado State: "+idco.longValue());
 	root.setDocumentosIn(documentos);
 	idco++;
@@ -62,6 +72,10 @@ public class DFAManager {
 	            		{
 	            	//	System.out.println("Creado State: "+idco.longValue());
 	            		Destino=new StateDFA(idco.longValue());
+	            		long EndDFAO = System.nanoTime();
+	            		long DiferenciaDFAO = EndDFAO-StartDFA;
+	            		tiemposCreacion.add(DiferenciaDFAO);
+	            		
 	            		idco++;
 	            		Destino.setDocumentosIn(value);
 	            		
@@ -128,8 +142,39 @@ public class DFAManager {
 
 	public ArrayList<Long> Navega() {
 		ArrayList<Long> Salida=new ArrayList<Long>();
+		
+		Queue<PosibleNodo> cola = new PriorityQueue<PosibleNodo>();
+		
+		for (Entry<Long, StateDFA> pieza : root.getTransicion().entrySet()) {
+			ArrayList<DocumentsV> Total=calculaTotal(pieza.getValue());
+			PosibleNodo p=new PosibleNodo(Total.size(),pieza.getKey(),pieza.getValue());
+			cola.add(p);
+		}
+		
+		
+		boolean selecionada=false;
+		PosibleNodo seleccion=null;
+		
+		Random R=new Random();
+		
+		while(!selecionada&&!cola.isEmpty())
+		{
+			seleccion=cola.remove();
+			selecionada=R.nextBoolean();
+			
+		}
+		
+		
+		
+		
+		
 		return Salida;
 		
+	}
+
+	private ArrayList<DocumentsV> calculaTotal(StateDFA value) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void setNavegacionGenerada(ArrayList<Long> navegacionGenerada) {
