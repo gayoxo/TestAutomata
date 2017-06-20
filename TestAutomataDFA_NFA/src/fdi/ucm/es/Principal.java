@@ -122,8 +122,44 @@ public class Principal {
 		
 		}
 		
+		HSSFSheet Tiempos = libro.createSheet("Construccion_Navegacion");
 		
-		int Navegaciones = documentos.size()*0;
+		HSSFRow filaCN = Tiempos.createRow(filaI);
+		filaI++;
+		
+		HSSFCell celda00CN = filaCN.createCell(0);
+		celda00CN.setCellValue("#");
+		
+		
+		HSSFCell celda0CN = filaCN.createCell(1);
+		celda0CN.setCellValue("DFA");
+		
+		HSSFCell celda1CN = filaCN.createCell(2);
+		celda1CN.setCellValue("NFA");
+		
+
+		{
+			HSSFRow filaN = Construcion.createRow(filaI);
+			filaI++;
+			
+			HSSFCell celda00N = filaN.createCell(0);
+			celda00N.setCellValue(0);
+			
+			
+			HSSFCell celda0N = filaN.createCell(1);
+			celda0N.setCellValue(DiferenciaDFA);
+			
+			HSSFCell celda1N = filaN.createCell(2);
+			celda1N.setCellValue(DiferenciaNFA);
+			
+		}
+		
+		
+		
+		int Navegaciones = documentos.size()*1;
+		
+		long StartDFAN = System.nanoTime();
+		long StartNFAN = System.nanoTime();
 		
 		for (int i = 0; i < Navegaciones; i++) {
 			
@@ -131,7 +167,7 @@ public class Principal {
 			
 			DFAObject.setNavegacionGenerada(NavegacionGenerada);
 			
-			long StartDFAN = System.nanoTime();
+			
 			NavegacionGenerada=DFAObject.Navega();
 			long EndDFAN = System.nanoTime();
 			long DiferenciaDFAN = EndDFAN-StartDFAN;
@@ -140,10 +176,27 @@ public class Principal {
 
 			NFAObject.setNavegacionGenerada(NavegacionGenerada);
 			
-			long StartNFAN = System.nanoTime();
+			
 			NavegacionGenerada=NFAObject.Navega();
 			long EndNFAN = System.nanoTime();
 			long DiferenciaNFAN = EndNFAN-StartNFAN;
+			
+			
+			{
+				HSSFRow filaN = Construcion.createRow(filaI);
+				filaI++;
+				
+				HSSFCell celda00N = filaN.createCell(0);
+				celda00N.setCellValue(i+1);
+				
+				
+				HSSFCell celda0N = filaN.createCell(1);
+				celda0N.setCellValue(DiferenciaDFAN);
+				
+				HSSFCell celda1N = filaN.createCell(2);
+				celda1N.setCellValue(DiferenciaNFAN);
+				
+			}
 			
 			System.out.println("Browsing->("+i+")   DFA->"+DiferenciaDFAN+" NFA->"+DiferenciaNFAN);
 		}
