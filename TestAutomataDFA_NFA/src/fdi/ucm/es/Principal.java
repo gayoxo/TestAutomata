@@ -122,10 +122,11 @@ public class Principal {
 		
 		}
 		
+		int FilaI2=0;
 		HSSFSheet Tiempos = libro.createSheet("Construccion_Navegacion");
 		
-		HSSFRow filaCN = Tiempos.createRow(filaI);
-		filaI++;
+		HSSFRow filaCN = Tiempos.createRow(FilaI2);
+		FilaI2++;
 		
 		HSSFCell celda00CN = filaCN.createCell(0);
 		celda00CN.setCellValue("#");
@@ -139,8 +140,8 @@ public class Principal {
 		
 
 		{
-			HSSFRow filaN = Construcion.createRow(filaI);
-			filaI++;
+			HSSFRow filaN = Tiempos.createRow(FilaI2);
+			FilaI2++;
 			
 			HSSFCell celda00N = filaN.createCell(0);
 			celda00N.setCellValue(0);
@@ -156,7 +157,7 @@ public class Principal {
 		
 		
 		
-		int Navegaciones = documentos.size()*1;
+		int Navegaciones = documentos.size()*10;
 		
 		long StartDFAN = System.nanoTime();
 		long StartNFAN = System.nanoTime();
@@ -170,7 +171,7 @@ public class Principal {
 			
 			NavegacionGenerada=DFAObject.Navega();
 			long EndDFAN = System.nanoTime();
-			long DiferenciaDFAN = EndDFAN-StartDFAN;
+			long DiferenciaDFAN = (EndDFAN-StartDFAN)+DiferenciaDFA;
 			
 			System.out.println(Arrays.toString(NavegacionGenerada.toArray()));
 
@@ -179,12 +180,12 @@ public class Principal {
 			
 			NavegacionGenerada=NFAObject.Navega();
 			long EndNFAN = System.nanoTime();
-			long DiferenciaNFAN = EndNFAN-StartNFAN;
+			long DiferenciaNFAN = (EndNFAN-StartNFAN)+DiferenciaNFA;
 			
 			
 			{
-				HSSFRow filaN = Construcion.createRow(filaI);
-				filaI++;
+				HSSFRow filaN = Tiempos.createRow(FilaI2);
+				FilaI2++;
 				
 				HSSFCell celda00N = filaN.createCell(0);
 				celda00N.setCellValue(i+1);
