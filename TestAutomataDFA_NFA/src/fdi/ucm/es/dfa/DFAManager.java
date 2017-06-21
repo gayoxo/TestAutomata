@@ -26,17 +26,19 @@ public class DFAManager {
 	private StateDFA root;
 	private ArrayList<Long> NavegacionGenerada;
 
-	public DFAManager(List<DocumentsV> documentos, List<Long> tiemposCreacion) {
+	public DFAManager(List<DocumentsV> documentos
+//			, List<Long> tiemposCreacion
+			) {
 
-	long StartDFA = System.nanoTime();	
+//	long StartDFA = System.nanoTime();	
 		
 	idco=1l;
 	Stack<StateDFA> PilaProcesar = new Stack<StateDFA>();
 	HashMap<Integer,List<StateDFA>> Total =new HashMap<Integer,List<StateDFA>>();
 	root=new StateDFA(idco.longValue());
-	long EndDFA = System.nanoTime();
-	long DiferenciaDFA = EndDFA-StartDFA;
-	tiemposCreacion.add(DiferenciaDFA);
+//	long EndDFA = System.nanoTime();
+//	long DiferenciaDFA = EndDFA-StartDFA;
+//	tiemposCreacion.add(DiferenciaDFA);
 //	System.out.println("Creado State: "+idco.longValue());
 	root.setDocumentosIn(documentos);
 	idco++;
@@ -71,9 +73,9 @@ public class DFAManager {
 	            		{
 	            	//	System.out.println("Creado State: "+idco.longValue());
 	            		Destino=new StateDFA(idco.longValue());
-	            		long EndDFAO = System.nanoTime();
-	            		long DiferenciaDFAO = EndDFAO-StartDFA;
-	            		tiemposCreacion.add(DiferenciaDFAO);
+//	            		long EndDFAO = System.nanoTime();
+//	            		long DiferenciaDFAO = EndDFAO-StartDFA;
+//	            		tiemposCreacion.add(DiferenciaDFAO);
 	            		
 	            		idco++;
 	            		Destino.setDocumentosIn(value);

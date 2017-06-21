@@ -26,16 +26,18 @@ public class NFAManager {
 	private StateNFA root;
 	private int navegacion_actual;
 	
-	public NFAManager(List<DocumentsV> documentos, List<Long> tiemposNFA) {
+	public NFAManager(List<DocumentsV> documentos
+//			, List<Long> tiemposNFA
+			) {
 		
-		long StartNFA = System.nanoTime();
+//		long StartNFA = System.nanoTime();
 		
 		idco=1l;
 		Stack<StateNFA> PilaProcesar = new Stack<StateNFA>();
 		root=new StateNFA(idco.longValue(),null);
-		long EndNFA = System.nanoTime();
-		long DiferenciaNFA = EndNFA-StartNFA;
-		tiemposNFA.add(DiferenciaNFA);
+//		long EndNFA = System.nanoTime();
+//		long DiferenciaNFA = EndNFA-StartNFA;
+//		tiemposNFA.add(DiferenciaNFA);
 		
 //		System.out.println("Creado State: "+idco.longValue());
 		root.setDocumentosIn(documentos);
@@ -78,9 +80,9 @@ public class NFAManager {
 		            	{
 		            	StateNFA Destino = new StateNFA(idco.longValue(),Actual);
 	            		
-		            	long EndNFAO = System.nanoTime();
-		        		long DiferenciaNFAO = EndNFAO-StartNFA;
-		        		tiemposNFA.add(DiferenciaNFAO);
+//		            	long EndNFAO = System.nanoTime();
+//		        		long DiferenciaNFAO = EndNFAO-StartNFA;
+//		        		tiemposNFA.add(DiferenciaNFAO);
 		            	
 		            	idco++;
 	            		Destino.setDocumentosIn(value);

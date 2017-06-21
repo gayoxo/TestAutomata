@@ -15,10 +15,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import fdi.ucm.es.dfa.DFAManager;
 import fdi.ucm.es.model.DocumentsV;
@@ -32,7 +32,7 @@ import fdi.ucm.es.nfa.NFAManager;
 public class Principal {
 	
 	
-	private static boolean Debug=false;
+	private static boolean Debug=true;
 
 	/**
 	 * @param args
@@ -64,32 +64,38 @@ public class Principal {
 		 ArrayList<String> LineasSalida=new ArrayList<String>();
 	        
 		
-		HSSFWorkbook libro = new HSSFWorkbook();
-		HSSFSheet Construcion = libro.createSheet("Construccion");
-		int filaI=0;
-		HSSFRow fila = Construcion.createRow(filaI);
-		filaI++;
-		
-		HSSFCell celda00 = fila.createCell(0);
-		celda00.setCellValue("#");
-		
-		
-		HSSFCell celda0 = fila.createCell(1);
-		celda0.setCellValue("DFA");
-		
-		HSSFCell celda1 = fila.createCell(2);
-		celda1.setCellValue("NFA");
-		
-		
-		HSSFCell celdaHelp = fila.createCell(4);
-		celdaHelp.setCellValue("Tiempor acmulados en la creacion de los nodos");
-		
-		
-		List<Long> TiemposDFA=new ArrayList<Long>();
+		 XSSFWorkbook  libro = new XSSFWorkbook ();
+		 
+		 
+//TEST Construccion Absurdo		 
+//		 XSSFSheet  Construcion = libro.createSheet("Construccion");
+//
+//		 
+//		int filaI=0;
+//		XSSFRow fila = Construcion.createRow(filaI);
+//		filaI++;
+//		
+//		XSSFCell  celda00 = fila.createCell(0);
+//		celda00.setCellValue("#");
+//		
+//		
+//		XSSFCell  celda0 = fila.createCell(1);
+//		celda0.setCellValue("DFA");
+//		
+//		XSSFCell  celda1 = fila.createCell(2);
+//		celda1.setCellValue("NFA");
+//		
+//		
+//		XSSFCell  celdaHelp = fila.createCell(4);
+//		celdaHelp.setCellValue("Tiempor acmulados en la creacion de los nodos");
+//			
+//		List<Long> TiemposDFA=new ArrayList<Long>();
 		
 		long StartDFA = System.nanoTime();
 		DFAManager DFAObject = 
-				new DFAManager(documentos,TiemposDFA);
+				new DFAManager(documentos
+//						,TiemposDFA
+						);
 		long EndDFA = System.nanoTime();
 		long DiferenciaDFA = EndDFA-StartDFA;
 		
@@ -98,11 +104,13 @@ public class Principal {
 		LineasSalida.add(NodosDFA);
 		
 		
-		List<Long> TiemposNFA=new ArrayList<Long>();
+//		List<Long> TiemposNFA=new ArrayList<Long>();
 		
 		long StartNFA = System.nanoTime();
 		NFAManager NFAObject = 
-				new NFAManager(documentos,TiemposNFA);
+				new NFAManager(documentos
+//						,TiemposNFA
+						);
 		long EndNFA = System.nanoTime();
 		long DiferenciaNFA = EndNFA-StartNFA;
 		
@@ -116,77 +124,105 @@ public class Principal {
 			System.out.println(Creation0);
 		LineasSalida.add(Creation0);
 		
-		Long DFACT=0l;
-		Long NFACT=0l;
-		
-		for (int i = 0; i < TiemposDFA.size(); i++) {
-			
-			DFACT = TiemposDFA.get(i);
-			
-			if (i<TiemposNFA.size())
-				NFACT = TiemposNFA.get(i);
-			
-			HSSFRow filaN = Construcion.createRow(filaI);
-			filaI++;
-			
-			
-			HSSFCell celda00N = filaN.createCell(0);
-			celda00N.setCellValue(i);
-			
-			
-			HSSFCell celda0N = filaN.createCell(1);
-			celda0N.setCellValue(DFACT);
-			
-			HSSFCell celda1N = filaN.createCell(2);
-			celda1N.setCellValue(NFACT);
-			
-		
-		}
+//TEST Construccion Absurdo			
+//		Long DFACT=0l;
+//		Long NFACT=0l;
+//		
+//		for (int i = 0; i < TiemposDFA.size(); i++) {
+//			
+//			DFACT = TiemposDFA.get(i);
+//			
+//			if (i<TiemposNFA.size())
+//				NFACT = TiemposNFA.get(i);
+//			
+//			XSSFRow filaN = Construcion.createRow(filaI);
+//			filaI++;
+//			
+//			
+//			XSSFCell  celda00N = filaN.createCell(0);
+//			celda00N.setCellValue(i);
+//			
+//			
+//			XSSFCell  celda0N = filaN.createCell(1);
+//			celda0N.setCellValue(DFACT);
+//			
+//			XSSFCell  celda1N = filaN.createCell(2);
+//			celda1N.setCellValue(NFACT);
+//			
+//		
+//		}
 		
 		int FilaI2=0;
-		HSSFSheet Tiempos = libro.createSheet("Construccion_Navegacion");
+		XSSFSheet Tiempos = libro.createSheet("Construccion_Navegacion");
 		
-		HSSFRow filaCN = Tiempos.createRow(FilaI2);
+		XSSFRow filaCN = Tiempos.createRow(FilaI2);
 		FilaI2++;
 		
-		HSSFCell celda00CN = filaCN.createCell(0);
+		XSSFCell celda00CN = filaCN.createCell(0);
 		celda00CN.setCellValue("#");
 		
 		
-		HSSFCell celda0CN = filaCN.createCell(1);
+		XSSFCell celda0CN = filaCN.createCell(1);
 		celda0CN.setCellValue("DFA");
 		
-		HSSFCell celda1CN = filaCN.createCell(2);
+		XSSFCell  celda0CNP = filaCN.createCell(2);
+		celda0CNP.setCellValue("DFA+");
+		
+		XSSFCell  celda1CN = filaCN.createCell(3);
 		celda1CN.setCellValue("NFA");
 		
-		HSSFCell celdaHelpCN = filaCN.createCell(4);
-		celdaHelpCN.setCellValue("Tiempor acumulados en la creacion de los nodos");
+		XSSFCell  celda1CNP = filaCN.createCell(4);
+		celda1CNP.setCellValue("NFA+");
 		
-
-		{
-			HSSFRow filaN = Tiempos.createRow(FilaI2);
-			FilaI2++;
-			
-			HSSFCell celda00N = filaN.createCell(0);
-			celda00N.setCellValue(0);
-			
-			
-			HSSFCell celda0N = filaN.createCell(1);
-			celda0N.setCellValue(DiferenciaDFA);
-			
-			HSSFCell celda1N = filaN.createCell(2);
-			celda1N.setCellValue(DiferenciaNFA);
-			
-		}
+		XSSFCell  celda2CN = filaCN.createCell(5);
+		celda2CN.setCellValue("NFA-DFA");
 		
+		XSSFCell  celda1AC = filaCN.createCell(6);
+		celda1AC.setCellValue("ACTION");
 		
+//		XSSFCell  celdaHelpCN = filaCN.createCell(4);
+//		celdaHelpCN.setCellValue("Tiempos no-acumulados en la creacion de los nodos");
 		
-		int Navegaciones = documentos.size()*2;
-		
-		System.out.println("Se realizan "+Navegaciones+" navegaciones");
 		
 		long DiferenciaDFAN=DiferenciaDFA;
 		long DiferenciaNFAN=DiferenciaNFA;
+
+		{
+			XSSFRow filaN = Tiempos.createRow(FilaI2);
+			FilaI2++;
+			
+			XSSFCell  celda00N = filaN.createCell(0);
+			celda00N.setCellValue(0);
+
+			XSSFCell  celda0N = filaN.createCell(1);
+			celda0N.setCellValue(DiferenciaDFA);
+			
+			XSSFCell  celda0NP = filaN.createCell(2);
+			celda0NP.setCellValue(DiferenciaDFAN);
+			
+			XSSFCell  celda1N = filaN.createCell(3);
+			celda1N.setCellValue(DiferenciaNFA);
+			
+			XSSFCell  celda1NP = filaN.createCell(4);
+			celda1NP.setCellValue(DiferenciaNFAN);
+			
+			XSSFCell  celda2N = filaN.createCell(5);
+			celda2N.setCellValue(DiferenciaNFA-DiferenciaDFA);
+			
+			XSSFCell  celda3N = filaN.createCell(6);
+			celda3N.setCellValue("CREATION");
+			
+			
+		}
+		
+		int Navegaciones=1;
+		
+		if (!documentos.isEmpty())
+			Navegaciones = documentos.size()*((1/documentos.size())+1);
+		
+		System.out.println("Se realizan "+Navegaciones+" navegaciones");
+		
+
 		
 		for (int i = 0; i < Navegaciones; i++) {
 			
@@ -197,7 +233,7 @@ public class Principal {
 			
 			long DiferenciaDFANP=DFAObject.Navega();
 			
-			DiferenciaDFAN = (DiferenciaDFAN)+DiferenciaDFANP;
+			DiferenciaDFAN = DiferenciaDFAN+DiferenciaDFANP;
 			
 			NavegacionGenerada=DFAObject.getNavegacionGenerada();
 			
@@ -212,36 +248,48 @@ public class Principal {
 			
 			
 			{
-				HSSFRow filaN = Tiempos.createRow(FilaI2);
+				XSSFRow filaN = Tiempos.createRow(FilaI2);
 				FilaI2++;
 				
-				HSSFCell celda00N = filaN.createCell(0);
+				XSSFCell  celda00N = filaN.createCell(0);
 				celda00N.setCellValue(i+1);
 				
 				
-				HSSFCell celda0N = filaN.createCell(1);
-				celda0N.setCellValue(DiferenciaDFAN);
+				XSSFCell  celda0N = filaN.createCell(1);
+				celda0N.setCellValue(DiferenciaDFANP);
 				
-				HSSFCell celda1N = filaN.createCell(2);
-				celda1N.setCellValue(DiferenciaNFAN);
+				XSSFCell  celda0NP = filaN.createCell(2);
+				celda0NP.setCellValue(DiferenciaDFAN);
+				
+				XSSFCell  celda1N = filaN.createCell(3);
+				celda1N.setCellValue(DiferenciaNFANP);
+				
+				XSSFCell  celda1NP = filaN.createCell(4);
+				celda1NP.setCellValue(DiferenciaNFAN);
+				
+				XSSFCell  celda2N = filaN.createCell(5);
+				celda2N.setCellValue(DiferenciaNFANP-DiferenciaDFANP);
+				
+				XSSFCell  celda3N = filaN.createCell(6);
+				celda3N.setCellValue("BROWSING");
 				
 			}
 			
-			String BrowsingN = "Browsing->("+i+")   DFA->"+DiferenciaDFAN+" NFA->"+DiferenciaNFAN;
+			String BrowsingN = "Browsing->("+i+")   DFA->"+DiferenciaDFANP+" NFA->"+DiferenciaNFANP;
 			if (Debug) 
 				System.out.println(BrowsingN);
 			
 			if (i%100==0)
 				System.out.println(i);
 			
-			LineasSalida.add(Creation0);
+			LineasSalida.add(BrowsingN);
 
 		}
 		
 		String filerandomvalue = filename+System.nanoTime();
 		
 		try {
-			   FileOutputStream elFichero = new FileOutputStream(filerandomvalue+".xls");
+			   FileOutputStream elFichero = new FileOutputStream(filerandomvalue+".xlsx");
 			   libro.write(elFichero);
 			   elFichero.close();
 			} catch (Exception e) {
