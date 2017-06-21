@@ -54,13 +54,7 @@ public abstract class State implements Comparable<State>{
 	
 	@Override
 	public int compareTo(State o) {
-		if (DocumentosIn.size() < o.DocumentosIn.size()) {
-            return 1;
-        } else if (DocumentosIn.size() > o.DocumentosIn.size()) {
-            return -1;
-        } else {
-            return 0;
-        }
+		return  o.DocumentosIn.size() - DocumentosIn.size();
 	}
 	
 

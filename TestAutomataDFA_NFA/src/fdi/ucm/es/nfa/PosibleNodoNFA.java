@@ -31,13 +31,7 @@ public class PosibleNodoNFA implements Comparable<PosibleNodoNFA>{
 
 	@Override
 	public int compareTo(PosibleNodoNFA o) {
-		if (numeroElementos < o.getNumeroElementos()) {
-            return 1;
-        } else if (numeroElementos > o.getNumeroElementos()) {
-            return -1;
-        } else {
-            return 0;
-        }
+		return  o.numeroElementos - numeroElementos;
 	}
 
 	public int getNumeroElementos() {
