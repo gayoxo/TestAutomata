@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Random;
 import java.util.Stack;
 import java.util.Map.Entry;
 
@@ -165,19 +164,24 @@ public class NFAManager {
 	}
 
 
-	public ArrayList<Long> Navega() {
-		ArrayList<Long> Salida=new ArrayList<Long>();
+	public Long Navega() {
+		ArrayList<Long> navegacion=new ArrayList<Long>();
 		
 		navegacion_actual=0;
 		
 		EstadoNavegacionNFA ES=new EstadoNavegacionNFA(root);
-		Navega(ES,Salida);
+		Long Salida=Navega(ES,navegacion);
 		
 		return Salida;
+
 		
 	}
 	
-	private void Navega(EstadoNavegacionNFA estadoSiguiente, ArrayList<Long> Salida) {
+	private Long Navega(EstadoNavegacionNFA estadoSiguiente, ArrayList<Long> Salida) {
+		
+		
+		long StartNFAN1 = System.nanoTime();
+		
 		Queue<PosibleNodoNFA> cola = new PriorityQueue<PosibleNodoNFA>();
 				
 		for (StateNFA posibleNodoNFA : estadoSiguiente.getActual()) {
@@ -190,8 +194,6 @@ public class NFAManager {
 				
 				PosibleNodoNFA p=new PosibleNodoNFA(Total.size(),pieza.getKey(),pieza.getValue());
 				cola.add(p);
-				
-				//PROCESAR BUCLES
 				
 			}
 		}
@@ -222,22 +224,26 @@ public class NFAManager {
 				
 		}		
 				
+		long EndNFAN1 = System.nanoTime();
+		long DiferenciaNFAN1 = EndNFAN1-StartNFAN1;
 				
-				boolean selecionada=false;
-				PosibleNodoNFA seleccion=null;
+//				boolean selecionada=false;
+//				PosibleNodoNFA seleccion=null;
+//				
+//				Random R=new Random();
+//				
+//				while(!selecionada&&!cola.isEmpty())
+//				{
+//					seleccion=cola.remove();
+//					selecionada=R.nextBoolean();
+//					if (selecionada)
+//							Salida.add(seleccion.getLongTransicion());
+//								
+//					
+//				}
 				
-				Random R=new Random();
 				
-				while(!selecionada&&!cola.isEmpty())
-				{
-					seleccion=cola.remove();
-					selecionada=R.nextBoolean();
-					if (selecionada)
-							Salida.add(seleccion.getLongTransicion());
-								
-					
-				}
-				
+				Long DiferenciaNFAN2 =0l;
 				
 				if (navegacion_actual<NavegacionGenerada.size())
 				{
@@ -262,9 +268,11 @@ public class NFAManager {
 					}
 				
 					estadoSiguiente.setActual(next);
-					Navega(estadoSiguiente, Salida);
+					DiferenciaNFAN2 =Navega(estadoSiguiente, Salida);
 					
 				}
+				
+				return DiferenciaNFAN1+DiferenciaNFAN2;
 				
 			}
 	

@@ -24,6 +24,7 @@ public class DFAManager {
 
 	private Long idco;
 	private StateDFA root;
+	private ArrayList<Long> NavegacionGenerada;
 
 	public DFAManager(List<DocumentsV> documentos, List<Long> tiemposCreacion) {
 
@@ -138,16 +139,21 @@ public class DFAManager {
 		this.idco = idco;
 	}
 
-	public ArrayList<Long> Navega() {
-		ArrayList<Long> Salida=new ArrayList<Long>();
+	public Long Navega() {
+		ArrayList<Long> navegacionGeneradaNueva=new ArrayList<Long>();
 		
-		Navega(root,Salida);
+		Long Salida=Navega(root,navegacionGeneradaNueva);
+		
+		this.NavegacionGenerada=navegacionGeneradaNueva;
 		
 		return Salida;
 		
 	}
 
-	private void Navega(StateDFA estadoSiguiente, ArrayList<Long> Salida) {
+	private Long Navega(StateDFA estadoSiguiente, ArrayList<Long> Salida) {
+		
+		long StartDFAN1 = System.nanoTime();
+		
 Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 		
 		for (Entry<Long, StateDFA> pieza : estadoSiguiente.getTransicion().entrySet()) {
@@ -158,8 +164,12 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 		}
 		
 		
+		long EndDFAN1 = System.nanoTime();
+		long DiferenciaDFAN1 = EndDFAN1-StartDFAN1;
+		
 		boolean selecionada=false;
 		PosibleNodoDFA seleccion=null;
+		
 		
 		Random R=new Random();
 		
@@ -167,13 +177,18 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 		{
 			seleccion=cola.remove();
 			selecionada=R.nextBoolean();
-			if (selecionada)
-				{
-					Salida.add(seleccion.getLongTransicion());
-					Navega(seleccion.getEstadoSiguiente(),Salida);
-				}
-			
 		}
+		
+		
+		Long DiferenciaDFAN2 =0l;
+		
+		if (seleccion!=null&&selecionada)
+			{
+			Salida.add(seleccion.getLongTransicion());
+			DiferenciaDFAN2 =Navega(seleccion.getEstadoSiguiente(),Salida);
+			}
+		
+		return DiferenciaDFAN1+DiferenciaDFAN2;
 		
 	}
 
@@ -197,6 +212,10 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 	public void setNavegacionGenerada(ArrayList<Long> navegacionGenerada) {
 		//No hace nada
 		
+	}
+	
+	public ArrayList<Long> getNavegacionGenerada() {
+		return NavegacionGenerada;
 	}
 	
 	

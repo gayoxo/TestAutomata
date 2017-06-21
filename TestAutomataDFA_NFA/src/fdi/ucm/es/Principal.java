@@ -4,9 +4,11 @@
 package fdi.ucm.es;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,6 +30,9 @@ import fdi.ucm.es.nfa.NFAManager;
  *
  */
 public class Principal {
+	
+	
+	private static boolean Debug=false;
 
 	/**
 	 * @param args
@@ -42,7 +47,7 @@ public class Principal {
 		System.out.println("File Loaded");
 		Collections.shuffle(Documentos);
 		long Start = System.nanoTime();
-		Simulation(Documentos);
+		Simulation(Documentos,arString);
 		long End = System.nanoTime();
 		long Diferencia = End-Start;
 		System.out.println("Simulation End time->"+Diferencia);
@@ -51,9 +56,13 @@ public class Principal {
 	/**
 	 * Proceso de simulacion
 	 * @param documentos
+	 * @param filename 
 	 */
-	private static void Simulation(List<DocumentsV> documentos) {
+	private static void Simulation(List<DocumentsV> documentos, String filename) {
 
+		
+		 ArrayList<String> LineasSalida=new ArrayList<String>();
+	        
 		
 		HSSFWorkbook libro = new HSSFWorkbook();
 		HSSFSheet Construcion = libro.createSheet("Construccion");
@@ -72,6 +81,10 @@ public class Principal {
 		celda1.setCellValue("NFA");
 		
 		
+		HSSFCell celdaHelp = fila.createCell(4);
+		celdaHelp.setCellValue("Tiempor acmulados en la creacion de los nodos");
+		
+		
 		List<Long> TiemposDFA=new ArrayList<Long>();
 		
 		long StartDFA = System.nanoTime();
@@ -80,7 +93,9 @@ public class Principal {
 		long EndDFA = System.nanoTime();
 		long DiferenciaDFA = EndDFA-StartDFA;
 		
-		System.out.println("DFA->"+DFAObject.getIdco());
+		String NodosDFA = "DFA->"+DFAObject.getIdco();
+		System.out.println(NodosDFA);
+		LineasSalida.add(NodosDFA);
 		
 		
 		List<Long> TiemposNFA=new ArrayList<Long>();
@@ -91,9 +106,15 @@ public class Principal {
 		long EndNFA = System.nanoTime();
 		long DiferenciaNFA = EndNFA-StartNFA;
 		
-		System.out.println("NFA->"+NFAObject.getIdco());
+		String NodosNFA = "NFA->"+NFAObject.getIdco();
+		System.out.println(NodosNFA);
+		LineasSalida.add(NodosNFA);
 		
-		System.out.println("Creation time    DFA->"+DiferenciaDFA+" NFA->"+DiferenciaNFA);
+		
+		String Creation0 = "Creation time    DFA->"+DiferenciaDFA+" NFA->"+DiferenciaNFA;
+		if (Debug)
+			System.out.println(Creation0);
+		LineasSalida.add(Creation0);
 		
 		Long DFACT=0l;
 		Long NFACT=0l;
@@ -138,6 +159,9 @@ public class Principal {
 		HSSFCell celda1CN = filaCN.createCell(2);
 		celda1CN.setCellValue("NFA");
 		
+		HSSFCell celdaHelpCN = filaCN.createCell(4);
+		celdaHelpCN.setCellValue("Tiempor acumulados en la creacion de los nodos");
+		
 
 		{
 			HSSFRow filaN = Tiempos.createRow(FilaI2);
@@ -157,10 +181,12 @@ public class Principal {
 		
 		
 		
-		int Navegaciones = documentos.size()*10;
+		int Navegaciones = documentos.size()*2;
 		
-		long StartDFAN = System.nanoTime();
-		long StartNFAN = System.nanoTime();
+		System.out.println("Se realizan "+Navegaciones+" navegaciones");
+		
+		long DiferenciaDFAN=DiferenciaDFA;
+		long DiferenciaNFAN=DiferenciaNFA;
 		
 		for (int i = 0; i < Navegaciones; i++) {
 			
@@ -169,18 +195,20 @@ public class Principal {
 			DFAObject.setNavegacionGenerada(NavegacionGenerada);
 			
 			
-			NavegacionGenerada=DFAObject.Navega();
-			long EndDFAN = System.nanoTime();
-			long DiferenciaDFAN = (EndDFAN-StartDFAN)+DiferenciaDFA;
+			long DiferenciaDFANP=DFAObject.Navega();
 			
-			System.out.println(Arrays.toString(NavegacionGenerada.toArray()));
+			DiferenciaDFAN = (DiferenciaDFAN)+DiferenciaDFANP;
+			
+			NavegacionGenerada=DFAObject.getNavegacionGenerada();
+			
+			if (Debug)
+				System.out.println(Arrays.toString(NavegacionGenerada.toArray()));
 
 			NFAObject.setNavegacionGenerada(NavegacionGenerada);
 			
 			
-			NavegacionGenerada=NFAObject.Navega();
-			long EndNFAN = System.nanoTime();
-			long DiferenciaNFAN = (EndNFAN-StartNFAN)+DiferenciaNFA;
+			long DiferenciaNFANP=NFAObject.Navega();
+			DiferenciaNFAN = DiferenciaNFAN+DiferenciaNFANP;
 			
 			
 			{
@@ -199,17 +227,46 @@ public class Principal {
 				
 			}
 			
-			System.out.println("Browsing->("+i+")   DFA->"+DiferenciaDFAN+" NFA->"+DiferenciaNFAN);
+			String BrowsingN = "Browsing->("+i+")   DFA->"+DiferenciaDFAN+" NFA->"+DiferenciaNFAN;
+			if (Debug) 
+				System.out.println(BrowsingN);
+			
+			if (i%100==0)
+				System.out.println(i);
+			
+			LineasSalida.add(Creation0);
+
 		}
 		
+		String filerandomvalue = filename+System.nanoTime();
 		
 		try {
-			   FileOutputStream elFichero = new FileOutputStream(System.nanoTime()+".xls");
+			   FileOutputStream elFichero = new FileOutputStream(filerandomvalue+".xls");
 			   libro.write(elFichero);
 			   elFichero.close();
 			} catch (Exception e) {
 			   e.printStackTrace();
 			}
+		
+		try {
+			 String ruta = filerandomvalue+".txt";
+		        File archivo = new File(ruta);
+		        BufferedWriter bw;
+		        bw = new BufferedWriter(new FileWriter(archivo));
+		        for (String cell : LineasSalida) {
+		        	 bw.write(cell+"\n");
+				}
+//		        if(archivo.exists()) {
+//		            bw = new BufferedWriter(new FileWriter(archivo));
+//		            bw.write("El fichero de texto ya estaba creado.");
+//		        } else {
+//		            bw = new BufferedWriter(new FileWriter(archivo));
+//		            bw.write("Acabo de crear el fichero de texto.");
+//		        }
+		        bw.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		
 	}
