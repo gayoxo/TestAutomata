@@ -8,10 +8,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+
+
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
-
 import fdi.ucm.es.Principal;
 import fdi.ucm.es.model.DocumentsV;
 
@@ -34,6 +35,7 @@ public class DFAManager {
 		
 	idco=1l;
 	PriorityQueue<StateDFA> PilaProcesar = new PriorityQueue<StateDFA>();
+//	Map<Set<Long>,StateDFA> existing = new HashMap<>();
 	root=new StateDFA(idco.longValue());
 //	long EndDFA = System.nanoTime();
 //	long DiferenciaDFA = EndDFA-StartDFA;
