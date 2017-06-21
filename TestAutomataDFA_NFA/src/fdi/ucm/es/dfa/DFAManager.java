@@ -4,6 +4,7 @@
 package fdi.ucm.es.dfa;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
+
 import fdi.ucm.es.Principal;
 import fdi.ucm.es.model.DocumentsV;
 
@@ -59,13 +61,19 @@ public class DFAManager {
 	            {
 	            	StateDFA Destino=null;
 	           
-	            	
-	            	for (StateDFA statepos : PilaProcesar) {
+	            	PriorityQueue<StateDFA> PilaTemporal = new PriorityQueue<StateDFA>(PilaProcesar);
+	            	while (!PilaTemporal.isEmpty()&&Destino==null)
+	            	 {
+	            		StateDFA statepos = PilaTemporal.remove();
+	            		
+	            		if (statepos.getDocumentosIn().size()<value.size())
+	            			break;
+	            		
 						if (check(statepos,value))
-						{
-						Destino=statepos;
-						break;
-						}
+							{
+							Destino=statepos;
+							break;
+							}
 					}
 	            	
 	            	if (Destino==null)
@@ -102,9 +110,23 @@ public class DFAManager {
 	private boolean check(StateDFA statepos, List<DocumentsV> value) {
 		if (statepos.getDocumentosIn().size()!=value.size())
 			return false;
-		HashSet<DocumentsV> via=new HashSet<>(statepos.getDocumentosIn());
-			via.removeAll(value);
-		return via.isEmpty();
+		
+	    Object[] ListaA = statepos.getDocumentosIn().toArray();
+		Object[] ListaB = value.toArray();
+		
+		Arrays.sort(ListaA);
+		Arrays.sort(ListaB);
+		
+		for (int i = 0; i < ListaA.length; i++) {
+			if (ListaA[i]!=ListaB[i])
+				return false;
+		}
+		
+		
+		return true;
+//		List<DocumentsV> via=new ArrayList<>(statepos.getDocumentosIn());
+//			via.removeAll(value);
+//		return via.isEmpty();
 	}
 
 	/**

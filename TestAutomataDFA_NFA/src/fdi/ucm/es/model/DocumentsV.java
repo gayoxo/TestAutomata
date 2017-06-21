@@ -10,7 +10,7 @@ import java.util.Arrays;
  * @author Joaquin Gayoso Cabada
  *
  */
-public class DocumentsV {
+public class DocumentsV implements Comparable<DocumentsV>{
 	
 	private ArrayList<Long> Att;
 	private Long Id;
@@ -43,7 +43,10 @@ public class DocumentsV {
 		Id = id;
 	}
 	
-	
+	@Override
+	public int compareTo(DocumentsV o) {
+		return  o.Id.intValue() - Id.intValue();
+	}
 	
 	@Override
 	public String toString() {
