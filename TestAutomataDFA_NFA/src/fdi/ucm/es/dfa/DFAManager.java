@@ -11,8 +11,8 @@ import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Stack;
 
+import fdi.ucm.es.Principal;
 import fdi.ucm.es.model.DocumentsV;
 
 /**
@@ -33,19 +33,19 @@ public class DFAManager {
 //	long StartDFA = System.nanoTime();	
 		
 	idco=1l;
-	Stack<StateDFA> PilaProcesar = new Stack<StateDFA>();
-	HashMap<Integer,List<StateDFA>> Total =new HashMap<Integer,List<StateDFA>>();
+	PriorityQueue<StateDFA> PilaProcesar = new PriorityQueue<StateDFA>();
 	root=new StateDFA(idco.longValue());
 //	long EndDFA = System.nanoTime();
 //	long DiferenciaDFA = EndDFA-StartDFA;
 //	tiemposCreacion.add(DiferenciaDFA);
-//	System.out.println("Creado State: "+idco.longValue());
+	if (Principal.Debug)
+		System.out.println("Creado State: "+idco.longValue());
 	root.setDocumentosIn(documentos);
 	idco++;
-	PilaProcesar.push(root);
+	PilaProcesar.add(root);
 	while (!PilaProcesar.isEmpty())
 		{
-			StateDFA Actual = PilaProcesar.pop();
+			StateDFA Actual = PilaProcesar.remove();
 			HashMap<Long,List<DocumentsV>> indice=GeneraIndice(Actual.getDocumentosIn());
 			for (Entry<Long, List<DocumentsV>> name: indice.entrySet()){
 	            Long key =name.getKey();
@@ -56,12 +56,9 @@ public class DFAManager {
 	            else
 	            {
 	            	StateDFA Destino=null;
-	            	List<StateDFA> Viables = Total.get(new Integer(value.size()));
+	           
 	            	
-	            	if (Viables==null)
-	            		Viables=new ArrayList<StateDFA>();
-	            	
-	            	for (StateDFA statepos : Viables) {
+	            	for (StateDFA statepos : PilaProcesar) {
 						if (check(statepos,value))
 						{
 						Destino=statepos;
@@ -71,7 +68,8 @@ public class DFAManager {
 	            	
 	            	if (Destino==null)
 	            		{
-	            	//	System.out.println("Creado State: "+idco.longValue());
+	            		if (Principal.Debug)
+	            			System.out.println("Creado State: "+idco.longValue());
 	            		Destino=new StateDFA(idco.longValue());
 //	            		long EndDFAO = System.nanoTime();
 //	            		long DiferenciaDFAO = EndDFAO-StartDFA;
@@ -80,13 +78,7 @@ public class DFAManager {
 	            		idco++;
 	            		Destino.setDocumentosIn(value);
 	            		
-	            		List<StateDFA> ViablesN = Total.get(new Integer(value.size()));
-		            	
-		            	if (ViablesN==null)
-		            		ViablesN=new ArrayList<StateDFA>();
-		            	
-		            	ViablesN.add(Destino);
-		            	Total.put(new Integer(value.size()), ViablesN);
+
 		            	PilaProcesar.add(Destino);
 	            		}
 	            		
@@ -106,6 +98,8 @@ public class DFAManager {
 	 * @return
 	 */
 	private boolean check(StateDFA statepos, List<DocumentsV> value) {
+		if (statepos.getDocumentosIn().size()!=value.size())
+			return false;
 		HashSet<DocumentsV> via=new HashSet<>(statepos.getDocumentosIn());
 			via.removeAll(value);
 		return via.isEmpty();

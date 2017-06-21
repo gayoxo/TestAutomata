@@ -32,7 +32,7 @@ import fdi.ucm.es.nfa.NFAManager;
 public class Principal {
 	
 	
-	private static boolean Debug=true;
+	public static boolean Debug=true;
 
 	/**
 	 * @param args

@@ -10,7 +10,7 @@ import java.util.List;
  * @author Joaquin Gayoso Cabada
  *
  */
-public abstract class State {
+public abstract class State implements Comparable<State>{
 
 	private Long Id;
 	private List<Long> Bucle;
@@ -50,6 +50,20 @@ public abstract class State {
 	public void setDocumentosIn(List<DocumentsV> documentosIn) {
 		DocumentosIn = documentosIn;
 	}
+	
+	
+	@Override
+	public int compareTo(State o) {
+		if (DocumentosIn.size() < o.DocumentosIn.size()) {
+            return 1;
+        } else if (DocumentosIn.size() > o.DocumentosIn.size()) {
+            return -1;
+        } else {
+            return 0;
+        }
+	}
+	
+
 
 	
 }
