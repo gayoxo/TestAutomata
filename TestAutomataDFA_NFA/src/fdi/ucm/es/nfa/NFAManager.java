@@ -13,6 +13,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.Map.Entry;
 
+import fdi.ucm.es.Principal;
 import fdi.ucm.es.model.DocumentsV;
 
 /**
@@ -200,6 +201,7 @@ public class NFAManager {
 					if (Parcial==null)
 						{
 						Parcial=calculaTotal(posibleNodo);
+						if (Principal.Ayuda)
 						Ayuda.put(posibleNodo, Parcial);
 						}
 					
@@ -242,6 +244,7 @@ public class NFAManager {
 					if (Parcial==null)
 						{
 						Parcial=calculaTotal(posibleNodo);
+						if (Principal.Ayuda)
 						Ayuda.put(posibleNodo, Parcial);
 						}
 					
@@ -357,6 +360,7 @@ public class NFAManager {
 				if (Posible==null)
 					{
 					Posible=calculaTotal(stater);
+					if (Principal.Ayuda)
 					Ayuda.put(stater, Posible);
 					}
 				

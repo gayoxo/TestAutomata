@@ -202,7 +202,8 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 			{
 			HashSet<StateDFA> procesed=new HashSet<StateDFA>();
 			Total=calculaTotal(pieza.getValue(),procesed);
-			Ayuda.put(pieza.getValue(),Total);
+			if (Principal.Ayuda)
+				Ayuda.put(pieza.getValue(),Total);
 			}
 			PosibleNodoDFA p=new PosibleNodoDFA(Total.size(),pieza.getKey(),pieza.getValue());
 			cola.add(p);
@@ -251,7 +252,8 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 				if (Posible==null)
 				{
 				 Posible = calculaTotal(entryHijo.getValue(),procesed);	
-				 Ayuda.put(entryHijo.getValue(),Posible);
+				 if (Principal.Ayuda)
+					 Ayuda.put(entryHijo.getValue(),Posible);
 				}
 				
 				for (DocumentsV documentsV : Posible)

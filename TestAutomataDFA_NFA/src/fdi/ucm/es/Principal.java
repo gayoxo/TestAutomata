@@ -34,6 +34,7 @@ public class Principal {
 	
 	private static final Float _DOWN_LIMIT = 0.01f; //1+_DOWN_LIMIT=f(1)
 	public static boolean Debug=true;
+	public static boolean Ayuda=false;
 
 	/**
 	 * @param args
