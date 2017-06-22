@@ -13,7 +13,6 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.Map.Entry;
 
-import fdi.ucm.es.Principal;
 import fdi.ucm.es.model.DocumentsV;
 
 /**
@@ -26,7 +25,6 @@ public class NFAManager {
 	private ArrayList<Long> NavegacionGenerada;
 	private StateNFA root;
 	private int navegacion_actual;
-	private HashMap<StateNFA,List<DocumentsV>> Ayuda;
 	
 	public NFAManager(List<DocumentsV> documentos
 //			, List<Long> tiemposNFA
@@ -171,8 +169,6 @@ public class NFAManager {
 	public Long Navega() {
 		ArrayList<Long> navegacion=new ArrayList<Long>();
 		
-		if (Ayuda==null)
-			Ayuda=new HashMap<StateNFA,List<DocumentsV>>();
 		
 		navegacion_actual=0;
 		
@@ -196,14 +192,11 @@ public class NFAManager {
 				
 				HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
 				for (StateNFA posibleNodo : pieza.getValue()) {
-					
-					List<DocumentsV> Parcial=Ayuda.get(posibleNodo);
-					if (Parcial==null)
-						{
-						Parcial=calculaTotal(posibleNodo);
-						if (Principal.Ayuda)
-						Ayuda.put(posibleNodo, Parcial);
-						}
+
+
+					List<DocumentsV> Parcial =posibleNodo.getDocumentosIn();
+
+
 					
 					Total.addAll(Parcial);
 				}
@@ -215,7 +208,6 @@ public class NFAManager {
 		}
 		
 		
-/////ESTO SE IGNORA		
 		
 		HashMap<Long, List<StateNFA>> bucles=new HashMap<Long, List<StateNFA>>();
 		for (StateNFA estadovalido : estadoSiguiente.getActual()) 
@@ -240,13 +232,8 @@ public class NFAManager {
 				HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
 				for (StateNFA posibleNodo : posibleNodoNFA.getValue()) {
 					
-					List<DocumentsV> Parcial=Ayuda.get(posibleNodo);
-					if (Parcial==null)
-						{
-						Parcial=calculaTotal(posibleNodo);
-						if (Principal.Ayuda)
-						Ayuda.put(posibleNodo, Parcial);
-						}
+					List<DocumentsV> Parcial=posibleNodo.getDocumentosIn();
+						
 					
 					Total.addAll(Parcial);
 				}
@@ -349,29 +336,29 @@ public class NFAManager {
 		
 	}
 	
-	private List<DocumentsV> calculaTotal(StateNFA value) {
-		ArrayList<DocumentsV> Salida=new ArrayList<DocumentsV>();
-		Salida.addAll(value.getDocumentosIn());
-		for (Entry<Long, List<StateNFA>> entryHijo : value.getTransicion().entrySet()) {
-			for (StateNFA stater : entryHijo.getValue()) {
-
-				
-				List<DocumentsV> Posible=Ayuda.get(stater);
-				if (Posible==null)
-					{
-					Posible=calculaTotal(stater);
-					if (Principal.Ayuda)
-					Ayuda.put(stater, Posible);
-					}
-				
-				for (DocumentsV documentsV : Posible)
-					if (!Salida.contains(documentsV))
-						Salida.add(documentsV);
-	
-			}
-			
-		}
-		return Salida;
-	}
+//	private List<DocumentsV> calculaTotal(StateNFA value) {
+//		ArrayList<DocumentsV> Salida=new ArrayList<DocumentsV>();
+//		Salida.addAll(value.getDocumentosIn());
+//		for (Entry<Long, List<StateNFA>> entryHijo : value.getTransicion().entrySet()) {
+//			for (StateNFA stater : entryHijo.getValue()) {
+//
+//				
+//				List<DocumentsV> Posible=Ayuda.get(stater);
+//				if (Posible==null)
+//					{
+//					Posible=calculaTotal(stater);
+//					if (Principal.Ayuda)
+//					Ayuda.put(stater, Posible);
+//					}
+//				
+//				for (DocumentsV documentsV : Posible)
+//					if (!Salida.contains(documentsV))
+//						Salida.add(documentsV);
+//	
+//			}
+//			
+//		}
+//		return Salida;
+//	}
 
 }

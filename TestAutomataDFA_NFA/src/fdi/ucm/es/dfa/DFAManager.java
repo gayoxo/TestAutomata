@@ -5,7 +5,6 @@ package fdi.ucm.es.dfa;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,6 @@ public class DFAManager {
 	private Long idco;
 	private StateDFA root;
 	private ArrayList<Long> NavegacionGenerada;
-	private HashMap<StateDFA, List<DocumentsV>> Ayuda;
 
 	public DFAManager(List<DocumentsV> documentos
 //			, List<Long> tiemposCreacion
@@ -177,8 +175,6 @@ public class DFAManager {
 	public Long Navega() {
 		ArrayList<Long> navegacionGeneradaNueva=new ArrayList<Long>();
 		
-		if (Ayuda==null)
-			Ayuda=new HashMap<StateDFA,List<DocumentsV>>();
 		
 		Long Salida=Navega(root,navegacionGeneradaNueva);
 		
@@ -197,17 +193,10 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 		
 		for (Entry<Long, StateDFA> pieza : estadoSiguiente.getTransicion().entrySet()) {
 			
-			List<DocumentsV> Total=Ayuda.get(pieza.getValue());
-			if (Total==null)
-			{
-			HashSet<StateDFA> procesed=new HashSet<StateDFA>();
-			Total=calculaTotal(pieza.getValue(),procesed);
-			if (Principal.Ayuda)
-				Ayuda.put(pieza.getValue(),Total);
-			}
+			List<DocumentsV> Total=pieza.getValue().getDocumentosIn();
+			
 			PosibleNodoDFA p=new PosibleNodoDFA(Total.size(),pieza.getKey(),pieza.getValue());
 			cola.add(p);
-			//AQUI ME HUNDO
 			
 		}
 		
@@ -240,30 +229,7 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 		
 	}
 
-	private List<DocumentsV> calculaTotal(StateDFA value,HashSet<StateDFA> procesed) {
-		ArrayList<DocumentsV> Salida=new ArrayList<DocumentsV>();
-		Salida.addAll(value.getDocumentosIn());
-		procesed.add(value);
-		for (Entry<Long, StateDFA> entryHijo : value.getTransicion().entrySet()) {
-			if (!procesed.contains(entryHijo.getValue()))
-				{
-				List<DocumentsV> Posible=Ayuda.get(entryHijo.getValue());
-				
-				if (Posible==null)
-				{
-				 Posible = calculaTotal(entryHijo.getValue(),procesed);	
-				 if (Principal.Ayuda)
-					 Ayuda.put(entryHijo.getValue(),Posible);
-				}
-				
-				for (DocumentsV documentsV : Posible)
-					if (!Salida.contains(documentsV))
-						Salida.add(documentsV);
-				
-				}
-		}
-		return Salida;
-	}
+	
 
 	public void setNavegacionGenerada(ArrayList<Long> navegacionGenerada) {
 		//No hace nada
