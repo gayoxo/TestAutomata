@@ -25,6 +25,7 @@ public class NFAManager {
 	private ArrayList<Long> NavegacionGenerada;
 	private StateNFA root;
 	private int navegacion_actual;
+	private HashMap<StateNFA,List<DocumentsV>> Ayuda;
 	
 	public NFAManager(List<DocumentsV> documentos
 //			, List<Long> tiemposNFA
@@ -169,6 +170,9 @@ public class NFAManager {
 	public Long Navega() {
 		ArrayList<Long> navegacion=new ArrayList<Long>();
 		
+		if (Ayuda==null)
+			Ayuda=new HashMap<StateNFA,List<DocumentsV>>();
+		
 		navegacion_actual=0;
 		
 		EstadoNavegacionNFA ES=new EstadoNavegacionNFA(root);
@@ -191,7 +195,15 @@ public class NFAManager {
 				
 				HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
 				for (StateNFA posibleNodo : pieza.getValue()) {
-					Total.addAll(calculaTotal(posibleNodo));
+					
+					List<DocumentsV> Parcial=Ayuda.get(posibleNodo);
+					if (Parcial==null)
+						{
+						Parcial=calculaTotal(posibleNodo);
+						Ayuda.put(posibleNodo, Parcial);
+						}
+					
+					Total.addAll(Parcial);
 				}
 				
 				PosibleNodoNFA p=new PosibleNodoNFA(Total.size(),pieza.getKey(),pieza.getValue());
@@ -201,30 +213,80 @@ public class NFAManager {
 		}
 		
 		
-		HashSet<Long> PosiblesBucles=new HashSet<Long>();
-		for (StateNFA posibleStatebucle : estadoSiguiente.getActual())
-			PosiblesBucles.addAll(posibleStatebucle.getBucle());
-
+/////ESTO SE IGNORA		
 		
+		HashMap<Long, List<StateNFA>> bucles=new HashMap<Long, List<StateNFA>>();
+		for (StateNFA estadovalido : estadoSiguiente.getActual()) 
+		{
+			for (Long long1 : estadovalido.getBucle()) {
+				List<StateNFA> A=bucles.get(long1);
+				if (A==null)
+					A=new ArrayList<StateNFA>();
+				if (!A.contains(estadovalido))
+					{
+					A.add(estadovalido);
+					bucles.put(long1, A);
+					}
+				
+			} 
+		}
 		
-		for (Long long1 : PosiblesBucles) {
-			List<StateNFA> reduce=new ArrayList<StateNFA>();
-			for (StateNFA estadovalido : estadoSiguiente.getActual())
-				if (estadovalido.getBucle().contains(long1))
-					reduce.add(estadovalido);
-			
-			if (reduce.size()<estadoSiguiente.getActual().size())
+		int basize=estadoSiguiente.getActual().size();
+		for (Entry<Long, List<StateNFA>> posibleNodoNFA : bucles.entrySet()) {
+			if (posibleNodoNFA.getValue().size()<basize)
 			{
 				HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
-				for (StateNFA posibleNodo : reduce) {
-					Total.addAll(calculaTotal(posibleNodo));
+				for (StateNFA posibleNodo : posibleNodoNFA.getValue()) {
+					
+					List<DocumentsV> Parcial=Ayuda.get(posibleNodo);
+					if (Parcial==null)
+						{
+						Parcial=calculaTotal(posibleNodo);
+						Ayuda.put(posibleNodo, Parcial);
+						}
+					
+					Total.addAll(Parcial);
 				}
 				
-				PosibleNodoNFA p=new PosibleNodoNFA(Total.size(),long1,reduce);
+				PosibleNodoNFA p=new PosibleNodoNFA(Total.size(),posibleNodoNFA.getKey(),posibleNodoNFA.getValue());
 				cola.add(p);
 			}
-				
-		}		
+			
+		}
+		
+		
+//		HashSet<Long> PosiblesBucles=new HashSet<Long>();
+//		for (StateNFA posibleStatebucle : estadoSiguiente.getActual())
+//			PosiblesBucles.addAll(posibleStatebucle.getBucle());
+//
+//		
+//		
+//		for (Long long1 : PosiblesBucles) {
+//			List<StateNFA> reduce=new ArrayList<StateNFA>();
+//			for (StateNFA estadovalido : estadoSiguiente.getActual())
+//				if (estadovalido.getBucle().contains(long1))
+//					reduce.add(estadovalido);
+//			
+//			if (reduce.size()<estadoSiguiente.getActual().size())
+//			{
+//				HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
+//				for (StateNFA posibleNodo : reduce) {
+//					
+//					List<DocumentsV> Parcial=Ayuda.get(posibleNodo);
+//					if (Parcial==null)
+//						{
+//						Parcial=calculaTotal(posibleNodo);
+//						Ayuda.put(posibleNodo, Parcial);
+//						}
+//					
+//					Total.addAll(Parcial);
+//				}
+//				
+//				PosibleNodoNFA p=new PosibleNodoNFA(Total.size(),long1,reduce);
+//				cola.add(p);
+//			}
+//				
+//		}		
 				
 		long EndNFAN1 = System.nanoTime();
 		long DiferenciaNFAN1 = EndNFAN1-StartNFAN1;
@@ -290,7 +352,14 @@ public class NFAManager {
 		for (Entry<Long, List<StateNFA>> entryHijo : value.getTransicion().entrySet()) {
 			for (StateNFA stater : entryHijo.getValue()) {
 
-				List<DocumentsV> Posible = calculaTotal(stater);	
+				
+				List<DocumentsV> Posible=Ayuda.get(stater);
+				if (Posible==null)
+					{
+					Posible=calculaTotal(stater);
+					Ayuda.put(stater, Posible);
+					}
+				
 				for (DocumentsV documentsV : Posible)
 					if (!Salida.contains(documentsV))
 						Salida.add(documentsV);

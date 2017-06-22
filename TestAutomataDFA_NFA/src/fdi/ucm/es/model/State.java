@@ -57,7 +57,10 @@ public abstract class State implements Comparable<State>{
 		return  o.DocumentosIn.size() - DocumentosIn.size();
 	}
 	
-
+@Override
+public String toString() {
+		return "{ID:"+Id+",Documents:"+DocumentosIn.size();
+}
 
 	
 }

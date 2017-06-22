@@ -32,6 +32,7 @@ import fdi.ucm.es.nfa.NFAManager;
 public class Principal {
 	
 	
+	private static final Float _DOWN_LIMIT = 0.01f; //1+_DOWN_LIMIT=f(1)
 	public static boolean Debug=true;
 
 	/**
@@ -218,7 +219,7 @@ public class Principal {
 		int Navegaciones=1;
 		
 		if (!documentos.isEmpty())
-			Navegaciones = documentos.size()*((1/documentos.size())+1);
+			Navegaciones = Math.round(documentos.size()*((1/documentos.size())+_DOWN_LIMIT));
 		
 		System.out.println("Se realizan "+Navegaciones+" navegaciones");
 		
@@ -279,7 +280,7 @@ public class Principal {
 			if (Debug) 
 				System.out.println(BrowsingN);
 			
-			if (i%100==0)
+			if (!Debug&&i%100==0)
 				System.out.println(i);
 			
 			LineasSalida.add(BrowsingN);

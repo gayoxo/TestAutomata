@@ -44,6 +44,15 @@ public class DocumentsV implements Comparable<DocumentsV>{
 	}
 	
 	@Override
+	public boolean equals(Object o) {
+		if (o instanceof DocumentsV)
+			return ((DocumentsV)o).Id.intValue() == Id.intValue();
+		else
+			return false;
+	}
+	
+	
+	@Override
 	public int compareTo(DocumentsV o) {
 		return  o.Id.intValue() - Id.intValue();
 	}
