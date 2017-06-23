@@ -4,6 +4,7 @@
 package fdi.ucm.es.dfa;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -29,6 +30,7 @@ public class DFAManager {
 	private Long idco;
 	private StateDFA root;
 	private ArrayList<Long> NavegacionGenerada;
+	private ArrayList<Integer> ResultadoDocs;
 
 	public DFAManager(List<DocumentsV> documentos
 //			, List<Long> tiemposCreacion
@@ -175,16 +177,23 @@ public class DFAManager {
 	public Long Navega() {
 		ArrayList<Long> navegacionGeneradaNueva=new ArrayList<Long>();
 		
+		ResultadoDocs=new ArrayList<>();
 		
 		Long Salida=Navega(root,navegacionGeneradaNueva);
 		
 		this.NavegacionGenerada=navegacionGeneradaNueva;
+		
+		if (Principal.Debug)
+			System.out.println("DFA ->"+Arrays.toString(ResultadoDocs.toArray()));
 		
 		return Salida;
 		
 	}
 
 	private Long Navega(StateDFA estadoSiguiente, ArrayList<Long> Salida) {
+		
+		ResultadoDocs.add(estadoSiguiente.getDocumentosIn().size());
+		
 		
 		long StartDFAN1 = System.nanoTime();
 		

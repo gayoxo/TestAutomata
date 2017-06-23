@@ -32,8 +32,8 @@ import fdi.ucm.es.nfa.NFAManager;
 public class Principal {
 	
 	
-	private static final Float _DOWN_LIMIT = 5f; //1+_DOWN_LIMIT=f(1)
-	public static boolean Debug=true;
+//	private static final Float _DOWN_LIMIT = 5f; //1+_DOWN_LIMIT=f(1)
+	public static boolean Debug=false;
 //	public static boolean Ayuda=false;
 
 	/**
@@ -217,10 +217,10 @@ public class Principal {
 			
 		}
 		
-		int Navegaciones=1;
+		int Navegaciones=1000;
 		
-		if (!documentos.isEmpty())
-			Navegaciones = Math.round(documentos.size()*((1/documentos.size())+_DOWN_LIMIT));
+//		if (!documentos.isEmpty())
+//			Navegaciones = Math.round(documentos.size()*((1/documentos.size())+_DOWN_LIMIT));
 		
 		System.out.println("Se realizan "+Navegaciones+" navegaciones");
 		
@@ -277,7 +277,7 @@ public class Principal {
 				
 			}
 			
-			String BrowsingN = "Browsing->("+i+")   DFA->"+DiferenciaDFANP+" NFA->"+DiferenciaNFANP;
+			String BrowsingN = "Browsing->("+i+"/"+Navegaciones+")   DFA->"+DiferenciaDFANP+" NFA->"+DiferenciaNFANP;
 			if (Debug) 
 				System.out.println(BrowsingN);
 			
@@ -342,7 +342,8 @@ public class Principal {
 	            {
 	        	 DocumentsV DV=new DocumentsV(idcounter.longValue());
 	        	 idcounter++;
-	        	 System.out.println(linea);
+	        	 if (Debug)
+	        		 System.out.println(linea);
 	             String[] lineaNE=linea.split(" ");
 	             for (String stringatt : lineaNE) {
 	            	try {

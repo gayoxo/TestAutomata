@@ -4,6 +4,7 @@
 package fdi.ucm.es.nfa;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.Map.Entry;
 
+import fdi.ucm.es.Principal;
 import fdi.ucm.es.model.DocumentsV;
 
 /**
@@ -25,6 +27,8 @@ public class NFAManager {
 	private ArrayList<Long> NavegacionGenerada;
 	private StateNFA root;
 	private int navegacion_actual;
+	
+	private ArrayList<Integer> ResultadoDocs;
 	
 	public NFAManager(List<DocumentsV> documentos
 //			, List<Long> tiemposNFA
@@ -169,11 +173,16 @@ public class NFAManager {
 	public Long Navega() {
 		ArrayList<Long> navegacion=new ArrayList<Long>();
 		
-		
+		ResultadoDocs=new ArrayList<>();
 		navegacion_actual=0;
 		
 		EstadoNavegacionNFA ES=new EstadoNavegacionNFA(root);
+		
+		
 		Long Salida=Navega(ES,navegacion);
+		
+		if (Principal.Debug)
+			System.out.println("NFA ->"+Arrays.toString(ResultadoDocs.toArray()));
 		
 		return Salida;
 
@@ -182,6 +191,7 @@ public class NFAManager {
 	
 	private Long Navega(EstadoNavegacionNFA estadoSiguiente, ArrayList<Long> Salida) {
 		
+		ResultadoDocs.add(CalculaDocs(estadoSiguiente).size());
 		
 		long StartNFAN1 = System.nanoTime();
 		
@@ -331,6 +341,21 @@ public class NFAManager {
 			}
 	
 	
+	private HashSet<DocumentsV> CalculaDocs(EstadoNavegacionNFA estadoSiguiente) {
+		HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
+		for (StateNFA posibleNodo : estadoSiguiente.getActual()) {
+
+
+			List<DocumentsV> Parcial =posibleNodo.getDocumentosIn();
+
+
+			
+			Total.addAll(Parcial);
+		}
+		return Total;
+	}
+
+
 	public void setNavegacionGenerada(ArrayList<Long> navegacionGenerada) {
 		NavegacionGenerada=navegacionGenerada;
 		
