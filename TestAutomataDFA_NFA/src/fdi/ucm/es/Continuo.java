@@ -396,8 +396,54 @@ public class Continuo {
 			
 		}		 
 		 
+		int FilaConstruccionNFA50 = 0;
+		 XSSFSheet TiemposNFA50 = libro.createSheet("Construccion_NFA50");
+			
+			XSSFRow filaCN50 = TiemposNFA50.createRow(FilaConstruccionNFA50);
+			FilaConstruccionNFA50++;
+			
+			XSSFCell celda00CN50 = filaCN50.createCell(0);
+			celda00CN50.setCellValue("#");
+			
+			
+			XSSFCell celda0CN50 = filaCN50.createCell(1);
+			celda0CN50.setCellValue("NFANodes");
+			
+			XSSFCell celda0CN50TM = filaCN50.createCell(2);
+			celda0CN50TM.setCellValue("Time");
 		 
-
+		for (int j = 0; j < 50; j++) {
+			
+			System.out.println("Simulacion NFA -> ite: " +j);
+			
+			Collections.shuffle(documentosEntrada);
+			
+			long StartNFA = System.nanoTime();
+			NFAManager NFAObject = 
+					new NFAManager(documentosEntrada
+//							,TiemposNFA
+							);
+			long EndNFA = System.nanoTime();
+			long DiferenciaNFA = EndNFA-StartNFA;
+			
+			Long NodosNFA = NFAObject.getIdco();
+			
+			XSSFRow filaCN50N = TiemposNFA50.createRow(FilaConstruccionNFA50);
+			FilaConstruccionNFA50++;
+			
+			XSSFCell celda00CN50N = filaCN50N.createCell(0);
+			celda00CN50N.setCellValue(j);
+			
+			
+			XSSFCell celda0CN50N = filaCN50N.createCell(1);
+			celda0CN50N.setCellValue(NodosNFA);
+			
+			XSSFCell celda0CN50TMN = filaCN50N.createCell(2);
+			celda0CN50TMN.setCellValue(DiferenciaNFA);
+			
+		}	
+			
+		
 	
 		
 		String filerandomvalue = filename+"_CONTINUO_"+System.nanoTime();
