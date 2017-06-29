@@ -326,7 +326,7 @@ public class Principal {
 	 * @param arString
 	 * @return
 	 */
-	private static List<DocumentsV> Load(String pathname) {
+	protected static List<DocumentsV> Load(String pathname) {
 		List<DocumentsV> Salida=new ArrayList<DocumentsV>();
 		HashMap<Long,Long> Actuales=new HashMap<Long,Long>();
 		FileReader fr = null;

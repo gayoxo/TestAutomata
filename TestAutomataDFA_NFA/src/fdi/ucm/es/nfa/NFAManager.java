@@ -224,7 +224,7 @@ public class NFAManager {
 					}
 			}
 			
-			HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
+			List<DocumentsV> Total=new ArrayList<DocumentsV>(); 
 			for (StateNFA posibleNodo : Resultado) {
 
 
@@ -390,8 +390,8 @@ public class NFAManager {
 			}
 	
 	
-	private HashSet<DocumentsV> CalculaDocs(EstadoNavegacionNFA estadoSiguiente) {
-		HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
+	private List<DocumentsV> CalculaDocs(EstadoNavegacionNFA estadoSiguiente) {
+		List<DocumentsV> Total=new ArrayList<DocumentsV>(); 
 		for (StateNFA posibleNodo : estadoSiguiente.getActual()) {
 
 
