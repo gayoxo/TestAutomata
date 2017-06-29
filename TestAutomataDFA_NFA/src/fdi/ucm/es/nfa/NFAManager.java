@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
 import java.util.Map.Entry;
 
@@ -191,12 +192,60 @@ public class NFAManager {
 	
 	private Long Navega(EstadoNavegacionNFA estadoSiguiente, ArrayList<Long> Salida) {
 		
-		ResultadoDocs.add(CalculaDocs(estadoSiguiente).size());
+		Integer TotalActual = CalculaDocs(estadoSiguiente).size();
+		ResultadoDocs.add(TotalActual);
 		
 		long StartNFAN1 = System.nanoTime();
 		
 		Queue<PosibleNodoNFA> cola = new PriorityQueue<PosibleNodoNFA>();
+		
+		Set<Long> TransicionesPosibles=new HashSet<Long>();
+		
+		for (StateNFA estado : estadoSiguiente.getActual()) {
+			for (Long long1 : estado.getTransicion().keySet()) {
+				TransicionesPosibles.add(long1);
+			}
+			
+			for (Long long1 : estado.getBucle()) {
+				TransicionesPosibles.add(long1);
+			}
+		}
+		
+		for (Long IdTransicion : TransicionesPosibles) {
+			List<StateNFA> Resultado=new ArrayList<StateNFA>();
+			for (StateNFA EstadoActual : estadoSiguiente.getActual()) {
+				if (EstadoActual.getBucle().contains(IdTransicion))
+					Resultado.add(EstadoActual);
+				else
+					{
+					List<StateNFA> NextStates = EstadoActual.getTransicion().get(IdTransicion);
+					if (NextStates!=null&&!NextStates.isEmpty())
+						Resultado.addAll(NextStates);
+					}
+			}
+			
+			HashSet<DocumentsV> Total=new HashSet<DocumentsV>(); 
+			for (StateNFA posibleNodo : Resultado) {
+
+
+				List<DocumentsV> Parcial =posibleNodo.getDocumentosIn();
+
+
 				
+				Total.addAll(Parcial);
+			}
+			
+			if (Resultado.size()!=TotalActual)
+				{
+				PosibleNodoNFA p=new PosibleNodoNFA(Total.size(),IdTransicion,Resultado);
+				cola.add(p);
+				}
+			
+		}
+		
+		
+		
+	/*	
 		for (StateNFA posibleNodoNFA : estadoSiguiente.getActual()) {
 			for (Entry<Long, List<StateNFA>> pieza : posibleNodoNFA.getTransicion().entrySet()) {
 				
@@ -253,7 +302,7 @@ public class NFAManager {
 			}
 			
 		}
-		
+		*/
 		
 //		HashSet<Long> PosiblesBucles=new HashSet<Long>();
 //		for (StateNFA posibleStatebucle : estadoSiguiente.getActual())
