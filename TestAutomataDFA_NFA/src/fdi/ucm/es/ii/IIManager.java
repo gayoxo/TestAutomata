@@ -11,7 +11,6 @@ import java.util.Queue;
 
 import fdi.ucm.es.Principal;
 import fdi.ucm.es.model.DocumentsV;
-import fdi.ucm.es.nfa.StateNFA;
 
 public class IIManager {
 	
@@ -64,7 +63,7 @@ navegacion_actual=0;
 		return Salida;
 	}
 
-	private Long Navega(HashMap<Long, List<DocumentsV>> tablaII2, ArrayList<Long> navegacionGeneradaNueva) {
+	private Long Navega(HashMap<Long, List<DocumentsV>> tablaII2, ArrayList<Long> Salida) {
 	
 		ResultadoDocs.add(CalculaDocs(tablaII2));
 		
@@ -89,15 +88,24 @@ navegacion_actual=0;
 		long DiferenciaDFAN1 = EndDFAN1-StartDFAN1;
 		
 		if (Principal.Debug)
-			System.out.println("TimeD Ite->"+DiferenciaDFAN1);
+			System.out.println("TimeI Ite->"+DiferenciaDFAN1);
+		
+		HashMap<Long, PosibleNodoII> tablaBusqueda=new HashMap<>();
+		for (PosibleNodoII posibleNodoII : cola) 
+			tablaBusqueda.put(posibleNodoII.getLongTransicion(), posibleNodoII);
+		
+		
 		
 		
 		Long DiferenciaNFAN2 =0l;
 		
 		if (navegacion_actual<NavegacionGenerada.size())
 		{
-//		Long transicionA=NavegacionGenerada.get(navegacion_actual);
-//		navegacion_actual++;
+		Long transicionA=NavegacionGenerada.get(navegacion_actual);
+		navegacion_actual++;
+		
+		PosibleNodoII PP=tablaBusqueda.get(transicionA);
+		
 //		HashSet<StateNFA> next=new HashSet<StateNFA>();
 //		
 //			for (StateNFA posibleNodoNFA : estadoSiguiente.getActual()) {
@@ -116,18 +124,18 @@ navegacion_actual=0;
 //				
 //			}
 //		
-//			estadoSiguiente.setActual(next);
-//			DiferenciaNFAN2 =Navega(estadoSiguiente, Salida);
+//			estadoSiguiente.setActual(new HashSet<>(PP.getEstadoSiguiente()));
+			DiferenciaNFAN2 =Navega(PP.getEstadoSiguiente(), Salida);
 			
 		}
 		
 		
 		if (Principal.Debug)
-			System.out.println("TimeN Ite2->"+DiferenciaNFAN2);
+			System.out.println("TimeI Ite2->"+DiferenciaNFAN2);
 		
 		
 		if (Principal.Debug)
-			System.out.println("TimeN IteT->"+DiferenciaDFAN1+DiferenciaNFAN2);
+			System.out.println("TimeI IteT->"+DiferenciaDFAN1+DiferenciaNFAN2);
 		
 		return DiferenciaDFAN1+DiferenciaNFAN2;
 	}

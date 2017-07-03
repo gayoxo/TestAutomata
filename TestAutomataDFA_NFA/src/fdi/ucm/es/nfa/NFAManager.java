@@ -284,7 +284,9 @@ public class NFAManager {
 		if (Principal.Debug)
 			System.out.println("TimeN Ite->"+DiferenciaNFAN1);
 
-				
+		HashMap<Long, PosibleNodoNFA> tablaBusqueda=new HashMap<>();
+		for (PosibleNodoNFA posibleNodoNFA : cola) 
+			tablaBusqueda.put(posibleNodoNFA.getLongTransicion(), posibleNodoNFA);
 				
 				Long DiferenciaNFAN2 =0l;
 				
@@ -292,25 +294,28 @@ public class NFAManager {
 				{
 				Long transicionA=NavegacionGenerada.get(navegacion_actual);
 				navegacion_actual++;
-				HashSet<StateNFA> next=new HashSet<StateNFA>();
 				
-					for (StateNFA posibleNodoNFA : estadoSiguiente.getActual()) {
-						ArrayList<StateNFA> sucession=new ArrayList<StateNFA>();
-						if (posibleNodoNFA.getBucle().contains(transicionA))
-							sucession.add(posibleNodoNFA);
-						else
-							{
-							List<StateNFA> haciaDelante = posibleNodoNFA.getTransicion().get(transicionA);
-							if (haciaDelante!=null)
-								sucession.addAll(haciaDelante);
-							}
-						
-						
-							next.addAll(sucession);
-						
-					}
+				PosibleNodoNFA PP=tablaBusqueda.get(transicionA);
 				
-					estadoSiguiente.setActual(next);
+//				HashSet<StateNFA> next=new HashSet<StateNFA>();
+//				
+//					for (StateNFA posibleNodoNFA : estadoSiguiente.getActual()) {
+//						ArrayList<StateNFA> sucession=new ArrayList<StateNFA>();
+//						if (posibleNodoNFA.getBucle().contains(transicionA))
+//							sucession.add(posibleNodoNFA);
+//						else
+//							{
+//							List<StateNFA> haciaDelante = posibleNodoNFA.getTransicion().get(transicionA);
+//							if (haciaDelante!=null)
+//								sucession.addAll(haciaDelante);
+//							}
+//						
+//						
+//							next.addAll(sucession);
+//						
+//					}
+				
+					estadoSiguiente.setActual(new HashSet<>(PP.getEstadoSiguiente()));
 					DiferenciaNFAN2 =Navega(estadoSiguiente, Salida);
 					
 				}
