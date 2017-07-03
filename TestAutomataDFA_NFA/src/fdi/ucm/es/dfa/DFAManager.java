@@ -213,6 +213,11 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 		long EndDFAN1 = System.nanoTime();
 		long DiferenciaDFAN1 = EndDFAN1-StartDFAN1;
 		
+		
+		if (Principal.Debug)
+			System.out.println("TimeD Ite->"+DiferenciaDFAN1);
+
+		
 		boolean selecionada=false;
 		PosibleNodoDFA seleccion=null;
 		
@@ -233,6 +238,14 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 			Salida.add(seleccion.getLongTransicion());
 			DiferenciaDFAN2 =Navega(seleccion.getEstadoSiguiente(),Salida);
 			}
+		
+		
+		if (Principal.Debug)
+			System.out.println("TimeD Ite2->"+DiferenciaDFAN2);
+		
+		
+		if (Principal.Debug)
+			System.out.println("TimeD IteT->"+DiferenciaDFAN1+DiferenciaDFAN2);
 		
 		return DiferenciaDFAN1+DiferenciaDFAN2;
 		

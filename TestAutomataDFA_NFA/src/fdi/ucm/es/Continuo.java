@@ -18,6 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import fdi.ucm.es.dfa.DFAManager;
+import fdi.ucm.es.ii.IIManager;
 import fdi.ucm.es.model.DocumentsV;
 import fdi.ucm.es.nfa.NFAManager;
 
@@ -82,6 +83,7 @@ public class Continuo extends Principal{
 		 int FilaConstruccion=0;
 		 int FilaConstruccionDFA=0;
 		 int FilaConstruccionNFA=0;
+		 int FilaConstruccionII=0;
 				 
 		 XSSFSheet Tiempos = libro.createSheet("Construccion_Navegacion");
 			
@@ -91,24 +93,37 @@ public class Continuo extends Principal{
 			XSSFCell celda00CN = filaCN.createCell(0);
 			celda00CN.setCellValue("#");
 			
+			XSSFCell  celda1AC = filaCN.createCell(1);
+			celda1AC.setCellValue("ACTION");
 			
-			XSSFCell celda0CN = filaCN.createCell(1);
+			XSSFCell celda0CN = filaCN.createCell(2);
 			celda0CN.setCellValue("DFA");
 			
-			XSSFCell  celda0CNP = filaCN.createCell(2);
+			XSSFCell  celda0CNP = filaCN.createCell(3);
 			celda0CNP.setCellValue("DFA+");
 			
-			XSSFCell  celda1CN = filaCN.createCell(3);
+			XSSFCell  celda1CN = filaCN.createCell(4);
 			celda1CN.setCellValue("NFA");
 			
-			XSSFCell  celda1CNP = filaCN.createCell(4);
+			XSSFCell  celda1CNP = filaCN.createCell(5);
 			celda1CNP.setCellValue("NFA+");
 			
-			XSSFCell  celda2CN = filaCN.createCell(5);
-			celda2CN.setCellValue("NFA-DFA");
+			XSSFCell  celda2CI = filaCN.createCell(6);
+			celda2CI.setCellValue("II");
 			
-			XSSFCell  celda1AC = filaCN.createCell(6);
-			celda1AC.setCellValue("ACTION");
+			XSSFCell  celda2CIP = filaCN.createCell(7);
+			celda2CIP.setCellValue("II+");
+			
+			XSSFCell  celda3ND = filaCN.createCell(8);
+			celda3ND.setCellValue("NFA-DFA");
+			
+			XSSFCell  celda3NI = filaCN.createCell(9);
+			celda3NI.setCellValue("NFA-II");
+			
+			XSSFCell  celda3DI = filaCN.createCell(10);
+			celda3DI.setCellValue("DFA-II");
+			
+			
 
 			
 			
@@ -127,16 +142,27 @@ public class Continuo extends Principal{
 			
 			XSSFCell  celda1filaConstrucccion = filaConstrucccion.createCell(2);
 			celda1filaConstrucccion.setCellValue("NFA");
-
 			
 			XSSFCell  celda2filaConstrucccion = filaConstrucccion.createCell(3);
-			celda2filaConstrucccion.setCellValue("NFA-DFA");
-			
+			celda2filaConstrucccion.setCellValue("II");
+
 			XSSFCell celda0filaNodes = filaConstrucccion.createCell(4);
 			celda0filaNodes.setCellValue("DFA Nodes");
 			
 			XSSFCell  celda1filaNodes = filaConstrucccion.createCell(5);
 			celda1filaNodes.setCellValue("NFA Nodes");
+			
+			XSSFCell  celda2filaNodes = filaConstrucccion.createCell(6);
+			celda2filaNodes.setCellValue("II Size");
+			
+			XSSFCell  celda0Diferencial = filaConstrucccion.createCell(7);
+			celda0Diferencial.setCellValue("NFA-DFA");
+			
+			XSSFCell  celda1Diferencial = filaConstrucccion.createCell(8);
+			celda1Diferencial.setCellValue("NFA-II");
+			
+			XSSFCell  celda2Diferencial = filaConstrucccion.createCell(9);
+			celda2Diferencial.setCellValue("DFA-II");
 			
 			XSSFSheet Tiempos_ConstruccionDFA = libro.createSheet("NavegacionDFA");
 			
@@ -166,6 +192,22 @@ public class Continuo extends Principal{
 				for (int i = 0; i < 50; i++) {
 					XSSFCell celda0filaConstrucccionNFA = filaConstrucccionNFA.createCell(i+1);
 					celda0filaConstrucccionNFA.setCellValue(i+1);
+				}
+				
+			}
+			
+			XSSFSheet Tiempos_ConstruccionII = libro.createSheet("NavegacionII");
+			
+			{
+				XSSFRow filaConstrucccionII = Tiempos_ConstruccionII.createRow(FilaConstruccionII);
+				FilaConstruccionII++;
+				
+				XSSFCell celda00filaConstrucccionII = filaConstrucccionII.createCell(0);
+				celda00filaConstrucccionII.setCellValue("NDOCS\\Navegacion");
+				
+				for (int i = 0; i < 50; i++) {
+					XSSFCell celda0filaConstrucccionII = filaConstrucccionII.createCell(i+1);
+					celda0filaConstrucccionII.setCellValue(i+1);
 				}
 				
 			}
@@ -214,7 +256,20 @@ public class Continuo extends Principal{
 			LineasSalida.add(NodosNFA);
 			
 			
-			String Creation0 = "Creation time    DFA->"+DiferenciaDFA+" NFA->"+DiferenciaNFA;
+			long StartII = System.nanoTime();
+			IIManager IIObject = 
+					new IIManager(documentos
+//							,TiemposNFA
+							);
+			long EndII = System.nanoTime();
+			long DiferenciaII = EndII-StartII;
+			
+			String NodosII = "II->"+IIObject.getIdco();
+			System.out.println(NodosII);
+			LineasSalida.add(NodosII);
+			
+			
+			String Creation0 = "Creation time    DFA->"+DiferenciaDFA+" NFA->"+DiferenciaNFA+" II->"+DiferenciaII;
 			if (Debug)
 				System.out.println(Creation0);
 			LineasSalida.add(Creation0);
@@ -223,6 +278,7 @@ public class Continuo extends Principal{
 			
 			long DiferenciaDFAN=DiferenciaDFA;
 			long DiferenciaNFAN=DiferenciaNFA;
+			long DiferenciaIIN=DiferenciaII;
 
 			if (documentos.size()==documentosEntrada.size())
 			{
@@ -231,29 +287,36 @@ public class Continuo extends Principal{
 				
 				XSSFCell  celda00N = filaN.createCell(0);
 				celda00N.setCellValue(0);
+				
+				XSSFCell  celdaCC = filaN.createCell(1);
+				celdaCC.setCellValue("CREATION");
 
-				XSSFCell  celda0N = filaN.createCell(1);
+				XSSFCell  celda0N = filaN.createCell(2);
 				celda0N.setCellValue(DiferenciaDFA);
 				
-				XSSFCell  celda0NP = filaN.createCell(2);
+				XSSFCell  celda0NP = filaN.createCell(3);
 				celda0NP.setCellValue(DiferenciaDFAN);
 				
-				XSSFCell  celda1N = filaN.createCell(3);
+				XSSFCell  celda1N = filaN.createCell(4);
 				celda1N.setCellValue(DiferenciaNFA);
 				
-				XSSFCell  celda1NP = filaN.createCell(4);
+				XSSFCell  celda1NP = filaN.createCell(5);
 				celda1NP.setCellValue(DiferenciaNFAN);
 				
-				XSSFCell  celda2N = filaN.createCell(5);
-				celda2N.setCellValue(DiferenciaNFA-DiferenciaDFA);
+				XSSFCell  celda2I = filaN.createCell(6);
+				celda2I.setCellValue(DiferenciaII);
 				
-				XSSFCell  celda3N = filaN.createCell(6);
-				celda3N.setCellValue("CREATION");
+				XSSFCell  celda2IN = filaN.createCell(7);
+				celda2IN.setCellValue(DiferenciaIIN);
 				
+				XSSFCell  celda3CND = filaN.createCell(8);
+				celda3CND.setCellValue(DiferenciaNFA-DiferenciaDFA);
 				
+				XSSFCell  celda3CNI = filaN.createCell(9);
+				celda3CNI.setCellValue(DiferenciaNFA-DiferenciaII);
 				
-				
-				
+				XSSFCell  celda3CDI = filaN.createCell(10);
+				celda3CDI.setCellValue(DiferenciaDFA-DiferenciaII);		
 			}
 			
 			{
@@ -270,21 +333,32 @@ public class Continuo extends Principal{
 				XSSFCell  celda1N = filaN.createCell(2);
 				celda1N.setCellValue(DiferenciaNFA);
 				
-		
 				XSSFCell  celda2N = filaN.createCell(3);
-				celda2N.setCellValue(DiferenciaNFA-DiferenciaDFA);		
+				celda2N.setCellValue(DiferenciaII);
+						
+				XSSFCell  celda0DT = filaN.createCell(4);
+				celda0DT.setCellValue(DFAObject.getIdco());
+								
+				XSSFCell  celda1DT = filaN.createCell(5);
+				celda1DT.setCellValue(NFAObject.getIdco());
 				
-				XSSFCell  celda3N = filaN.createCell(4);
-				celda3N.setCellValue(DFAObject.getIdco());
+				XSSFCell  celda2DT = filaN.createCell(6);
+				celda2DT.setCellValue(IIObject.getIdco());
 				
+				XSSFCell  celda0DND = filaN.createCell(7);
+				celda0DND.setCellValue(DiferenciaNFA-DiferenciaDFA);	
 				
-				XSSFCell  celda4N = filaN.createCell(5);
-				celda4N.setCellValue(NFAObject.getIdco());
+				XSSFCell  celda1DND = filaN.createCell(8);
+				celda1DND.setCellValue(DiferenciaNFA-DiferenciaII);
+				
+				XSSFCell  celda2DND = filaN.createCell(9);
+				celda2DND.setCellValue(DiferenciaDFA-DiferenciaII);
 				
 			}
 			
 			int FilaConstruccionDFAColum=0;
 			int FilaConstruccionNFAColum=0;
+			int FilaConstruccionIIColum=0;
 			
 			
 			XSSFRow DFATimeSerie = Tiempos_ConstruccionDFA.createRow(FilaConstruccionDFA);
@@ -302,16 +376,28 @@ public class Continuo extends Principal{
 			XSSFCell  celda0NFDA = NFATimeSerie.createCell(FilaConstruccionNFAColum);
 			celda0NFDA.setCellValue(IteracionDocs);
 			FilaConstruccionNFAColum++;
+			
+			
+			XSSFRow IITimeSerie = Tiempos_ConstruccionII.createRow(FilaConstruccionII);
+			FilaConstruccionII++;
+			
+			XSSFCell  celda0IIA = IITimeSerie.createCell(FilaConstruccionIIColum);
+			celda0IIA.setCellValue(IteracionDocs);
+			FilaConstruccionIIColum++;
 		
 			
 			
 			int Navegaciones=1000;
 			if (documentos.size()!=documentosEntrada.size())
 				Navegaciones=50;
+			else
+				{
+				System.out.println("Se realizan "+Navegaciones+" navegaciones");
+				if (Debug)
+					System.out.println("Navegaciones Finales");
+				}
 			
-			System.out.println("Se realizan "+Navegaciones+" navegaciones");
-			
-
+				
 			
 			for (int i = 0; i < Navegaciones; i++) {
 				
@@ -335,6 +421,12 @@ public class Continuo extends Principal{
 				long DiferenciaNFANP=NFAObject.Navega();
 				DiferenciaNFAN = DiferenciaNFAN+DiferenciaNFANP;
 				
+				
+				IIObject.setNavegacionGenerada(NavegacionGenerada);
+				
+				long DiferenciaNIIP=IIObject.Navega();
+				DiferenciaIIN = DiferenciaIIN+DiferenciaNIIP;
+				
 				if (documentos.size()==documentosEntrada.size())
 				{
 					XSSFRow filaN = Tiempos.createRow(FilaConstruccionNavegacion);
@@ -343,24 +435,37 @@ public class Continuo extends Principal{
 					XSSFCell  celda00N = filaN.createCell(0);
 					celda00N.setCellValue(i+1);
 					
+					XSSFCell  celda3N = filaN.createCell(1);
+					celda3N.setCellValue("BROWSING");
 					
-					XSSFCell  celda0N = filaN.createCell(1);
+					XSSFCell  celda0N = filaN.createCell(2);
 					celda0N.setCellValue(DiferenciaDFANP);
 					
-					XSSFCell  celda0NP = filaN.createCell(2);
+					XSSFCell  celda0NP = filaN.createCell(3);
 					celda0NP.setCellValue(DiferenciaDFAN);
 					
-					XSSFCell  celda1N = filaN.createCell(3);
+					XSSFCell  celda1N = filaN.createCell(4);
 					celda1N.setCellValue(DiferenciaNFANP);
 					
-					XSSFCell  celda1NP = filaN.createCell(4);
+					XSSFCell  celda1NP = filaN.createCell(5);
 					celda1NP.setCellValue(DiferenciaNFAN);
 					
-					XSSFCell  celda2N = filaN.createCell(5);
-					celda2N.setCellValue(DiferenciaNFANP-DiferenciaDFANP);
+					XSSFCell  celda2N = filaN.createCell(6);
+					celda2N.setCellValue(DiferenciaNIIP);
 					
-					XSSFCell  celda3N = filaN.createCell(6);
-					celda3N.setCellValue("BROWSING");
+					XSSFCell  celda2NP = filaN.createCell(7);
+					celda2NP.setCellValue(DiferenciaIIN);
+					
+					XSSFCell  celda0DND = filaN.createCell(8);
+					celda0DND.setCellValue(DiferenciaNFANP-DiferenciaDFANP);
+					
+					XSSFCell  celda1DNI = filaN.createCell(9);
+					celda1DNI.setCellValue(DiferenciaNFANP-DiferenciaNIIP);
+					
+					XSSFCell  celda2DDI = filaN.createCell(10);
+					celda2DDI.setCellValue(DiferenciaDFANP-DiferenciaNIIP);
+					
+					
 					
 					
 				}
@@ -375,13 +480,17 @@ public class Continuo extends Principal{
 				XSSFCell  celdaNCDFA = NFATimeSerie.createCell(FilaConstruccionNFAColum);
 				celdaNCDFA.setCellValue(DiferenciaNFANP);
 				FilaConstruccionNFAColum++;
+				
+				XSSFCell  celdaIIA = IITimeSerie.createCell(FilaConstruccionIIColum);
+				celdaIIA.setCellValue(DiferenciaNIIP);
+				FilaConstruccionIIColum++;
 				}
 				
-				String BrowsingN = "Browsing->("+i+"/"+Navegaciones+")   DFA->"+DiferenciaDFANP+" NFA->"+DiferenciaNFANP;
+				String BrowsingN = "Browsing->("+i+"/"+Navegaciones+")   DFA->"+DiferenciaDFANP+" NFA->"+DiferenciaNFANP+" II->"+DiferenciaNIIP ;
 				if (Debug) 
 					System.out.println(BrowsingN);
 				
-				if (!Debug&&i%100==0)
+				if (!Debug&&i%100==0&&documentos.size()==documentosEntrada.size())
 					System.out.println(i);
 				
 				LineasSalida.add(BrowsingN);
