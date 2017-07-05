@@ -53,7 +53,7 @@ navegacion_actual=0;
 		
 		ResultadoDocs=new ArrayList<>();
 		
-		Long Salida=Navega(TablaII,navegacionGeneradaNueva);
+		Long Salida=Navega(new ArrayList<Long>(),navegacionGeneradaNueva);
 		
 		this.NavegacionGenerada=navegacionGeneradaNueva;
 		
@@ -63,23 +63,33 @@ navegacion_actual=0;
 		return Salida;
 	}
 
-	private Long Navega(HashMap<Long, List<DocumentsV>> tablaII2, ArrayList<Long> Salida) {
+	private Long Navega(ArrayList<Long> select, ArrayList<Long> Salida) {
 	
-		ResultadoDocs.add(CalculaDocs(tablaII2));
+		
+		
+		
 		
 		
 		long StartDFAN1 = System.nanoTime();
 		
+		
+		HashSet<DocumentsV> Documentos=CalculaDocs(TablaII,select);
+		
+		ResultadoDocs.add(Documentos.size());
+		
 		Queue<PosibleNodoII> cola = new PriorityQueue<PosibleNodoII>();
 		
-		for (Entry<Long, List<DocumentsV>> pieza : tablaII2.entrySet()) {
+		for (Entry<Long, List<DocumentsV>> pieza : TablaII.entrySet()) {
 			
+			if (!Salida.contains(pieza.getKey()))
+			{
 			List<DocumentsV> Total=pieza.getValue();
 			
-			HashMap<Long, List<DocumentsV>> tablaII2Posible=createTabla(tablaII2,Total,pieza.getKey());
+			List<DocumentsV> Intersect=intersec(Total,Documentos);
 			
-			PosibleNodoII p=new PosibleNodoII(Total.size(),pieza.getKey(),tablaII2Posible);
+			PosibleNodoII p=new PosibleNodoII(Intersect.size(),pieza.getKey());
 			cola.add(p);
+			}
 			
 		}
 		
@@ -87,7 +97,7 @@ navegacion_actual=0;
 		long EndDFAN1 = System.nanoTime();
 		long DiferenciaDFAN1 = EndDFAN1-StartDFAN1;
 		
-		if (Principal.Debug)
+		if (Principal.DebugTiming)
 			System.out.println("TimeI Ite->"+DiferenciaDFAN1);
 		
 		HashMap<Long, PosibleNodoII> tablaBusqueda=new HashMap<>();
@@ -125,50 +135,46 @@ navegacion_actual=0;
 //			}
 //		
 //			estadoSiguiente.setActual(new HashSet<>(PP.getEstadoSiguiente()));
-			DiferenciaNFAN2 =Navega(PP.getEstadoSiguiente(), Salida);
+			select.add(PP.getLongTransicion());
+			DiferenciaNFAN2 =Navega(select, Salida);
 			
 		}
 		
 		
-		if (Principal.Debug)
+		if (Principal.DebugTiming)
 			System.out.println("TimeI Ite2->"+DiferenciaNFAN2);
 		
 		
-		if (Principal.Debug)
+		if (Principal.DebugTiming)
 			System.out.println("TimeI IteT->"+DiferenciaDFAN1+DiferenciaNFAN2);
 		
 		return DiferenciaDFAN1+DiferenciaNFAN2;
 	}
 
-	private HashMap<Long, List<DocumentsV>> createTabla(HashMap<Long, List<DocumentsV>> tablaII2,
-			List<DocumentsV> total, Long excluir) {
-		HashMap<Long, List<DocumentsV>> Salida=new HashMap<>();
-		for (Entry<Long, List<DocumentsV>> tablaElement : tablaII2.entrySet())
-			if (!tablaElement.getKey().equals(excluir))
+	private List<DocumentsV> intersec(List<DocumentsV> total,
+			List<DocumentsV> documentos) {
+		List<DocumentsV> List1=total;
+		List<DocumentsV> List2=documentos;
+		if (List1.size()>List2.size())
 			{
-				List<DocumentsV> Act=new ArrayList<>(tablaElement.getValue());
-				List<DocumentsV> fur=new ArrayList<>();
-				for (DocumentsV documentosBase : total) {
-					if (Act.contains(documentosBase))
-						fur.add(documentosBase);
-				}
-				
-				if (fur.size()!=total.size()&&!fur.isEmpty())
-					Salida.put(tablaElement.getKey(), fur);
-				
+			List<DocumentsV>
 			}
-		
-		return Salida;
+		return null;
 	}
 
-	private Integer CalculaDocs(HashMap<Long, List<DocumentsV>> tablaII2) {
+	
+
+	private List<DocumentsV> CalculaDocs(HashMap<Long, List<DocumentsV>> tablaII2, ArrayList<Long> select) {
+		
+		
+		
 		HashSet<DocumentsV> Salida=new HashSet<>();
 		
 		for (Entry<Long, List<DocumentsV>> integer : tablaII2.entrySet()) {
 			Salida.addAll(integer.getValue());
 		}
 		
-		return Salida.size();
+		return new ArrayList<>(Salida);
 	}
 
 

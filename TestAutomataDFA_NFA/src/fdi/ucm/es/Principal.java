@@ -33,13 +33,16 @@ public class Principal {
 	
 	
 //	private static final Float _DOWN_LIMIT = 5f; //1+_DOWN_LIMIT=f(1)
-	public static boolean Debug=false;
+	public static final boolean Debug=true;
+	private static final boolean DebugExtra=false;
+	public static boolean DebugTiming;
 //	public static boolean Ayuda=false;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		DebugTiming=Debug&&DebugExtra;
 		System.out.println(Arrays.toString(args));
 		System.out.println("Loading File");
 		if (args.length==0)
@@ -281,8 +284,10 @@ public class Principal {
 			if (Debug) 
 				System.out.println(BrowsingN);
 			
-			if (!Debug&&i%100==0)
-				System.out.println(i);
+			if (!Debug) {
+				if (i%100==0)
+					System.out.println(i);
+			}
 			
 			LineasSalida.add(BrowsingN);
 

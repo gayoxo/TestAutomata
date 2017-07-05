@@ -281,7 +281,7 @@ public class NFAManager {
 		long EndNFAN1 = System.nanoTime();
 		long DiferenciaNFAN1 = EndNFAN1-StartNFAN1;
 		
-		if (Principal.Debug)
+		if (Principal.DebugTiming)
 			System.out.println("TimeN Ite->"+DiferenciaNFAN1);
 
 		HashMap<Long, PosibleNodoNFA> tablaBusqueda=new HashMap<>();
@@ -321,11 +321,11 @@ public class NFAManager {
 				}
 				
 				
-				if (Principal.Debug)
+				if (Principal.DebugTiming)
 					System.out.println("TimeN Ite2->"+DiferenciaNFAN2);
 				
 				
-				if (Principal.Debug)
+				if (Principal.DebugTiming)
 					System.out.println("TimeN IteT->"+DiferenciaNFAN1+DiferenciaNFAN2);
 				
 				return DiferenciaNFAN1+DiferenciaNFAN2;

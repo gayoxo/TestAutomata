@@ -490,8 +490,10 @@ public class Continuo extends Principal{
 				if (Debug) 
 					System.out.println(BrowsingN);
 				
-				if (!Debug&&i%100==0&&documentos.size()==documentosEntrada.size())
-					System.out.println(i);
+				if (!Debug) {
+					if (i%100==0 && documentos.size()==documentosEntrada.size())
+						System.out.println(i);
+				}
 				
 				LineasSalida.add(BrowsingN);
 

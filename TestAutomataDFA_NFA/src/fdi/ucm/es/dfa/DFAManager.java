@@ -55,7 +55,7 @@ public class DFAManager {
 	PilaProcesar.add(root);
 	while (!PilaProcesar.isEmpty())
 		{
-		if (Principal.Debug)
+		if (Principal.DebugTiming)
 			System.out.println("Pila Size: "+PilaProcesar.size());
 
 			StateDFA Actual = PilaProcesar.remove();
@@ -93,7 +93,7 @@ public class DFAManager {
 	            	
 	            	if (Destino==null)
 	            		{
-	            		if (Principal.Debug)
+	            		if (Principal.DebugTiming)
 	            			System.out.println("Creado State: "+idco.longValue());
 	            		Destino=new StateDFA(idco.longValue());
 //	            		long EndDFAO = System.nanoTime();
@@ -214,7 +214,7 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 		long DiferenciaDFAN1 = EndDFAN1-StartDFAN1;
 		
 		
-		if (Principal.Debug)
+		if (Principal.DebugTiming)
 			System.out.println("TimeD Ite->"+DiferenciaDFAN1);
 
 		
@@ -240,11 +240,11 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 			}
 		
 		
-		if (Principal.Debug)
+		if (Principal.DebugTiming)
 			System.out.println("TimeD Ite2->"+DiferenciaDFAN2);
 		
 		
-		if (Principal.Debug)
+		if (Principal.DebugTiming)
 			System.out.println("TimeD IteT->"+DiferenciaDFAN1+DiferenciaDFAN2);
 		
 		return DiferenciaDFAN1+DiferenciaDFAN2;

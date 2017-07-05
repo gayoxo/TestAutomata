@@ -1,28 +1,20 @@
 package fdi.ucm.es.ii;
 
-import java.util.HashMap;
-import java.util.List;
-
-import fdi.ucm.es.model.DocumentsV;
-
 public class PosibleNodoII implements Comparable<PosibleNodoII>{
 
 	private int numeroElementos;
 	private Long longTransicion;
-	private HashMap<Long, List<DocumentsV>> estadoSiguiente;
 
 	
 	@SuppressWarnings("unused")
 	private PosibleNodoII() {
 		this.numeroElementos=0;
 		this.longTransicion=0l;
-		this.estadoSiguiente=null;
 	}
 	
-	public PosibleNodoII(int nelements, Long transicion, HashMap<Long, List<DocumentsV>> estadoSiguiente) {
+	public PosibleNodoII(int nelements, Long transicion) {
 		this.numeroElementos=nelements;
 		this.longTransicion=transicion;
-		this.estadoSiguiente=estadoSiguiente;
 	}
 
 	@Override
@@ -51,15 +43,6 @@ public class PosibleNodoII implements Comparable<PosibleNodoII>{
 	public void setLongTransicion(Long longTransicion) {
 		this.longTransicion = longTransicion;
 	}
-
-	public HashMap<Long, List<DocumentsV>> getEstadoSiguiente() {
-		return estadoSiguiente;
-	}
-
-	public void setEstadoSiguiente(HashMap<Long, List<DocumentsV>> estadoSiguiente) {
-		this.estadoSiguiente = estadoSiguiente;
-	}
-
 
 	
 }
