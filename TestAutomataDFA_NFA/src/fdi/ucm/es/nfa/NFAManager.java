@@ -202,7 +202,6 @@ public class NFAManager {
 			if (Principal.DebugTiming)
 				System.out.println("DD: "+posibleNodo.getId()+"<->"+ Arrays.toString(posibleNodo.getDocumentosIn().toArray()));
 			totalDocRe.addAll(posibleNodo.getDocumentosIn());
-//			TotalActual=TotalActual+posibleNodo.getDocumentosIn().size();
 			}
 		
 		
@@ -218,28 +217,31 @@ public class NFAManager {
 		Set<Long> TransicionesPosibles=new HashSet<Long>();
 		
 		
-		HashMap<Long, Integer> bucles=new HashMap<>();
-		
-		for (StateNFA estado : estadoSiguiente.getActual()) {
-			
-			for (Long long1 : estado.getBucle()) {
-				Integer lists = bucles.get(estado);
-				if (lists==null)
-					lists=new Integer(0);
-				lists++;
-				bucles.put(long1, lists);
-			}
-		}
-		
+//		HashMap<Long, Integer> bucles=new HashMap<>();
+//		
+//		for (StateNFA estado : estadoSiguiente.getActual()) {
+//			
+//			for (Long long1 : estado.getBucle()) {
+//				Integer lists = bucles.get(estado);
+//				if (lists==null)
+//					lists=new Integer(0);
+//				lists++;
+//				bucles.put(long1, lists);
+//			}
+//		}
+//		
 		
 		for (StateNFA estado : estadoSiguiente.getActual()) 
+			{
 			TransicionesPosibles.addAll(estado.getTransicion().keySet());	
+			TransicionesPosibles.addAll(estado.getBucle());
+			}
 
-		
-		for (Entry<Long, Integer> estateLong : bucles.entrySet()) {
-			if (estateLong.getValue().intValue()!=estadoSiguiente.getActual().size())
-				TransicionesPosibles.add(estateLong.getKey());
-		}
+//		
+//		for (Entry<Long, Integer> estateLong : bucles.entrySet()) {
+//			if (estateLong.getValue().intValue()!=estadoSiguiente.getActual().size())
+//				TransicionesPosibles.add(estateLong.getKey());
+//		}
 		
 		
 		for (Long IdTransicion : TransicionesPosibles) {
@@ -258,14 +260,17 @@ public class NFAManager {
 					
 			
 
-				
-				int Total=0; 
+			HashSet<DocumentsV> totalDocRe2=new HashSet<>();
+			
 				for (StateNFA posibleNodo : Resultado)
-					Total=Total+posibleNodo.getDocumentosIn().size();
+					totalDocRe2.addAll(posibleNodo.getDocumentosIn());
 				
-				PosibleNodoNFA p=new PosibleNodoNFA(Total,IdTransicion,Resultado);
+				int NDOC = totalDocRe2.size();
+				if (NDOC!=totalDocRe.size())
+				{
+				PosibleNodoNFA p=new PosibleNodoNFA(totalDocRe2.size(),IdTransicion,Resultado);
 				cola.add(p);
-
+				}
 
 			
 			
