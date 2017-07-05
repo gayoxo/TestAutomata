@@ -59,7 +59,7 @@ public abstract class State implements Comparable<State>{
 	
 @Override
 public String toString() {
-		return "{ID:"+Id+",Documents:"+DocumentosIn.size();
+		return "{ID:"+Id+",Documents:"+DocumentosIn.size()+"}";
 }
 
 	

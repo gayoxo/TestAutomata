@@ -37,7 +37,9 @@ public class Continuo extends Principal{
 	/**
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
+		DebugTiming=Debug&&DebugExtra;
 		System.out.println(Arrays.toString(args));
 		System.out.println("Loading File");
 		if (args.length==0)
@@ -222,7 +224,7 @@ public class Continuo extends Principal{
 			
 			int IteracionDocs=documentos.size();
 			
-			String CreationIte = "->>>>IterationNumber<<<<--- : "+IteracionDocs;
+			String CreationIte = "->>>>IterationNumber<<<<--- : "+IteracionDocs+"/"+documentosEntrada.size();
 			
 				System.out.println(CreationIte);
 			
