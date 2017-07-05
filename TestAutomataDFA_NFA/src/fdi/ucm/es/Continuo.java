@@ -31,6 +31,7 @@ public class Continuo extends Principal{
 	
 	
 
+	private static final int _PARTIDO_CONTINUO_TOTAL = 50;
 	private static int _PARTIDOCONTINUO = 10;
 
 
@@ -62,18 +63,16 @@ public class Continuo extends Principal{
 	 */
 	private static void Simulation(List<DocumentsV> documentosEntrada, String filename) {
 
-		_PARTIDOCONTINUO=documentosEntrada.size()/50;
+		_PARTIDOCONTINUO=documentosEntrada.size()/_PARTIDO_CONTINUO_TOTAL;
 
 		 ArrayList<String> LineasSalida=new ArrayList<String>();
-		 
-		String Separacion="iteracion cada-> " +_PARTIDOCONTINUO+" documents"; 
-		System.out.println(Separacion);
-		LineasSalida.add(Separacion);
-		
+
 		if (_PARTIDOCONTINUO<1)
 			_PARTIDOCONTINUO=1;
 		
-	
+		String Separacion="iteracion cada-> " +_PARTIDOCONTINUO+" documents"; 
+		System.out.println(Separacion);
+		LineasSalida.add(Separacion);
 	        
 		
 		 XSSFWorkbook  libro = new XSSFWorkbook ();
