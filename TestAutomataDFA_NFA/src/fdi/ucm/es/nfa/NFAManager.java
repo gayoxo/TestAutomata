@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Set;
 import java.util.Stack;
 import java.util.Map.Entry;
 
@@ -214,6 +213,61 @@ public class NFAManager {
 		if (estadoSiguiente.getActual().size()>1)	
 		{
 		
+			HashMap<Long, PosibleNodoNFA> TablaInversa=new HashMap<>();
+			
+		for (StateNFA posibleNodoNFA : estadoSiguiente.getActual()) {
+				for (Entry<Long, List<StateNFA>> pieza : posibleNodoNFA.getTransicion().entrySet()) {
+					
+					
+					List<StateNFA> Resultado=pieza.getValue();
+					
+					int Total=0; 
+					for (StateNFA posibleNodo : Resultado)
+						Total=Total+posibleNodo.getDocumentosIn().size();
+					
+					
+					PosibleNodoNFA Previo = TablaInversa.get(pieza.getKey());
+					
+					if (Previo==null)
+					{
+					PosibleNodoNFA p=new PosibleNodoNFA(Total,pieza.getKey(),pieza.getValue());
+					cola.add(p);
+					TablaInversa.put(pieza.getKey(), p);
+					}
+					else
+					{
+						Previo.setNumeroElementos(Previo.getNumeroElementos()+Total);
+						Previo.getEstadoSiguiente().addAll(pieza.getValue());
+					}
+					
+				}
+				
+				for (Long pieza : posibleNodoNFA.getBucle()) {
+					
+					
+					
+					int Total=posibleNodoNFA.getDocumentosIn().size(); 
+
+					List<StateNFA> STA=new ArrayList<StateNFA>();
+					STA.add(posibleNodoNFA);
+					
+					PosibleNodoNFA Previo = TablaInversa.get(pieza);
+					
+					if (Previo==null)
+					{
+					PosibleNodoNFA p=new PosibleNodoNFA(Total,pieza,STA);
+					cola.add(p);
+					TablaInversa.put(pieza, p);
+					}
+					else
+					{
+						Previo.setNumeroElementos(Previo.getNumeroElementos()+Total);
+						Previo.getEstadoSiguiente().add(posibleNodoNFA);
+					}
+					
+				}
+		}	
+	/*		
 		Set<Long> TransicionesPosibles=new HashSet<Long>();
 		
 		
@@ -275,7 +329,7 @@ public class NFAManager {
 			
 			
 		}
-		
+		*/
 		}
 		
 		else
