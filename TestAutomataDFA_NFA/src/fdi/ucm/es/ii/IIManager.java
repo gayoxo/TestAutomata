@@ -67,28 +67,33 @@ navegacion_actual=0;
 	
 		
 		
-		
-		
-		
-		long StartDFAN1 = System.nanoTime();
-		
-		
-		HashSet<DocumentsV> Documentos=CalculaDocs(TablaII,select);
+
+		List<DocumentsV> Documentos=CalculaDocs(TablaII,select);
 		
 		ResultadoDocs.add(Documentos.size());
 		
+		
+		long StartDFAN1 = System.nanoTime();
+
+		
 		Queue<PosibleNodoII> cola = new PriorityQueue<PosibleNodoII>();
 		
-		for (Entry<Long, List<DocumentsV>> pieza : TablaII.entrySet()) {
+		for (Long pieza : TablaII.keySet()) {
 			
-			if (!Salida.contains(pieza.getKey()))
+			if (!Salida.contains(pieza))
 			{
-			List<DocumentsV> Total=pieza.getValue();
+				
+				ArrayList<Long> selectpos = new ArrayList<Long>(select);
+				selectpos.add(pieza);
+				
 			
-			List<DocumentsV> Intersect=intersec(Total,Documentos);
+			List<DocumentsV> Intersect=CalculaDocs(TablaII,selectpos);
 			
-			PosibleNodoII p=new PosibleNodoII(Intersect.size(),pieza.getKey());
-			cola.add(p);
+				if (!Intersect.isEmpty())
+				{
+				PosibleNodoII p=new PosibleNodoII(Intersect.size(),pieza);
+				cola.add(p);
+				}
 			}
 			
 		}
@@ -157,9 +162,19 @@ navegacion_actual=0;
 		List<DocumentsV> List2=documentos;
 		if (List1.size()>List2.size())
 			{
-			List<DocumentsV>
+			List<DocumentsV> TMP=List1;
+			List1=List2;
+			List2=TMP;
 			}
-		return null;
+		
+		List<DocumentsV> ListSalida=new ArrayList<>();
+		
+		for (DocumentsV documentsV : List1) {
+			if (List2.contains(documentsV))
+				ListSalida.add(documentsV);
+		}
+		
+		return ListSalida;
 	}
 
 	
@@ -167,14 +182,43 @@ navegacion_actual=0;
 	private List<DocumentsV> CalculaDocs(HashMap<Long, List<DocumentsV>> tablaII2, ArrayList<Long> select) {
 		
 		
+		ArrayList<List<DocumentsV>> ListasInter=new ArrayList<>();
 		
-		HashSet<DocumentsV> Salida=new HashSet<>();
 		
-		for (Entry<Long, List<DocumentsV>> integer : tablaII2.entrySet()) {
-			Salida.addAll(integer.getValue());
-		}
+		List<DocumentsV> Salida=null;
 		
-		return new ArrayList<>(Salida);
+		if (!select.isEmpty())
+			{
+			for (Long selectedLong : select) {
+				List<DocumentsV> act=tablaII2.get(selectedLong);
+				if (act!=null)
+					ListasInter.add(act);
+			}
+			for (List<DocumentsV> documentsV : ListasInter) {
+				if (Salida==null)
+					Salida=documentsV;
+				else
+					Salida=intersec(Salida, documentsV);
+					
+			}
+			
+			}
+		else
+			{
+			
+			HashSet<DocumentsV> SalidaHa=new HashSet<>();
+			for (Entry<Long, List<DocumentsV>> documentsV : tablaII2.entrySet()) 
+				SalidaHa.addAll(documentsV.getValue());
+			
+			Salida=new ArrayList<>(SalidaHa);
+			}
+		
+		
+		
+		
+		
+		
+		return Salida;
 	}
 
 

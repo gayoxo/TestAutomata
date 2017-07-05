@@ -412,8 +412,7 @@ public class Continuo extends Principal{
 				
 				NavegacionGenerada=DFAObject.getNavegacionGenerada();
 				
-				if (Debug)
-					System.out.println(Arrays.toString(NavegacionGenerada.toArray()));
+				
 
 				NFAObject.setNavegacionGenerada(NavegacionGenerada);
 				
@@ -426,6 +425,11 @@ public class Continuo extends Principal{
 				
 				long DiferenciaNIIP=IIObject.Navega();
 				DiferenciaIIN = DiferenciaIIN+DiferenciaNIIP;
+				
+				
+				if (Debug)
+					System.out.println(Arrays.toString(NavegacionGenerada.toArray()));
+				
 				
 				if (documentos.size()==documentosEntrada.size())
 				{
