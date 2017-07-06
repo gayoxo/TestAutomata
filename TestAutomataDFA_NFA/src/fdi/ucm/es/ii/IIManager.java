@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import fdi.ucm.es.Principal;
+import fdi.ucm.es.VariablesEstaticas;
 import fdi.ucm.es.model.DocumentsV;
 
 public class IIManager {
@@ -57,7 +57,7 @@ navegacion_actual=0;
 		
 		this.NavegacionGenerada=navegacionGeneradaNueva;
 		
-		if (Principal.Debug)
+		if (VariablesEstaticas.Debug)
 			System.out.println("II ->"+Arrays.toString(ResultadoDocs.toArray()));
 		
 		return Salida;
@@ -66,15 +66,12 @@ navegacion_actual=0;
 	private Long Navega(ArrayList<Long> select, ArrayList<Long> Salida) {
 	
 		
-		
+
+		long StartDFAN1 = System.nanoTime();
 
 		List<DocumentsV> Documentos=CalculaDocs(TablaII,select);
 		
 		ResultadoDocs.add(Documentos.size());
-		
-		
-		long StartDFAN1 = System.nanoTime();
-
 		
 		Queue<PosibleNodoII> cola = new PriorityQueue<PosibleNodoII>();
 		
@@ -83,13 +80,12 @@ navegacion_actual=0;
 			if (!Salida.contains(pieza))
 			{
 				
-				ArrayList<Long> selectpos = new ArrayList<Long>(select);
-				selectpos.add(pieza);
-				
+				ArrayList<Long> nueva=new ArrayList<>(select);
+				nueva.add(pieza);
 			
-			List<DocumentsV> Intersect=CalculaDocs(TablaII,selectpos);
+			List<DocumentsV> Intersect=CalculaDocs(TablaII,nueva);
 			
-				if (!Intersect.isEmpty())
+				if (!Intersect.isEmpty()&&Intersect.size()<Documentos.size())
 				{
 				PosibleNodoII p=new PosibleNodoII(Intersect.size(),pieza);
 				cola.add(p);
@@ -102,7 +98,7 @@ navegacion_actual=0;
 		long EndDFAN1 = System.nanoTime();
 		long DiferenciaDFAN1 = EndDFAN1-StartDFAN1;
 		
-		if (Principal.DebugTiming)
+		if (VariablesEstaticas.DebugTiming)
 			System.out.println("TimeI Ite->"+DiferenciaDFAN1);
 		
 		HashMap<Long, PosibleNodoII> tablaBusqueda=new HashMap<>();
@@ -146,11 +142,11 @@ navegacion_actual=0;
 		}
 		
 		
-		if (Principal.DebugTiming)
+		if (VariablesEstaticas.DebugTiming)
 			System.out.println("TimeI Ite2->"+DiferenciaNFAN2);
 		
 		
-		if (Principal.DebugTiming)
+		if (VariablesEstaticas.DebugTiming)
 			System.out.println("TimeI IteT->"+DiferenciaDFAN1+DiferenciaNFAN2);
 		
 		return DiferenciaDFAN1+DiferenciaNFAN2;

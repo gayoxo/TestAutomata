@@ -17,7 +17,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
-import fdi.ucm.es.Principal;
+import fdi.ucm.es.VariablesEstaticas;
 import fdi.ucm.es.model.DocumentsV;
 
 /**
@@ -45,7 +45,7 @@ public class DFAManager {
 //	long EndDFA = System.nanoTime();
 //	long DiferenciaDFA = EndDFA-StartDFA;
 //	tiemposCreacion.add(DiferenciaDFA);
-	if (Principal.Debug)
+	if (VariablesEstaticas.Debug)
 		System.out.println("Creado State: "+idco.longValue());
 	root.setDocumentosIn(documentos);
 	
@@ -55,7 +55,7 @@ public class DFAManager {
 	PilaProcesar.add(root);
 	while (!PilaProcesar.isEmpty())
 		{
-		if (Principal.DebugTiming)
+		if (VariablesEstaticas.DebugTiming)
 			System.out.println("Pila Size: "+PilaProcesar.size());
 
 			StateDFA Actual = PilaProcesar.remove();
@@ -93,7 +93,7 @@ public class DFAManager {
 	            	
 	            	if (Destino==null)
 	            		{
-	            		if (Principal.DebugTiming)
+	            		if (VariablesEstaticas.DebugTiming)
 	            			System.out.println("Creado State: "+idco.longValue());
 	            		Destino=new StateDFA(idco.longValue());
 //	            		long EndDFAO = System.nanoTime();
@@ -183,7 +183,7 @@ public class DFAManager {
 		
 		this.NavegacionGenerada=navegacionGeneradaNueva;
 		
-		if (Principal.Debug)
+		if (VariablesEstaticas.Debug)
 			System.out.println("DFA ->"+Arrays.toString(ResultadoDocs.toArray()));
 		
 		return Salida;
@@ -214,7 +214,7 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 		long DiferenciaDFAN1 = EndDFAN1-StartDFAN1;
 		
 		
-		if (Principal.DebugTiming)
+		if (VariablesEstaticas.DebugTiming)
 			System.out.println("TimeD Ite->"+DiferenciaDFAN1);
 
 		
@@ -240,11 +240,11 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 			}
 		
 		
-		if (Principal.DebugTiming)
+		if (VariablesEstaticas.DebugTiming)
 			System.out.println("TimeD Ite2->"+DiferenciaDFAN2);
 		
 		
-		if (Principal.DebugTiming)
+		if (VariablesEstaticas.DebugTiming)
 			System.out.println("TimeD IteT->"+DiferenciaDFAN1+DiferenciaDFAN2);
 		
 		return DiferenciaDFAN1+DiferenciaDFAN2;

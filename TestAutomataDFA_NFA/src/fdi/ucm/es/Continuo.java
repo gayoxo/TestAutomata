@@ -3,13 +3,16 @@
  */
 package fdi.ucm.es;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -27,20 +30,19 @@ import fdi.ucm.es.nfa.NFAManager;
  * @author Joaquin Gayoso Cabada
  *
  */
-public class Continuo extends Principal{
+public class Continuo{
 	
 	
 
-	private static final int _PARTIDO_CONTINUO_TOTAL = 50;
+	private static final int _PARTIDO_CONTINUO_TOTAL = 1;
 	private static int _PARTIDOCONTINUO = 10;
 
 
 	/**
 	 * @param args
 	 */
-	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		DebugTiming=Debug&&DebugExtra;
+		VariablesEstaticas.DebugTiming=VariablesEstaticas.Debug&&VariablesEstaticas.DebugExtra;
 		System.out.println(Arrays.toString(args));
 		System.out.println("Loading File");
 		if (args.length==0)
@@ -271,7 +273,7 @@ public class Continuo extends Principal{
 			
 			
 			String Creation0 = "Creation time    DFA->"+DiferenciaDFA+" NFA->"+DiferenciaNFA+" II->"+DiferenciaII;
-			if (Debug)
+			if (VariablesEstaticas.Debug)
 				System.out.println(Creation0);
 			LineasSalida.add(Creation0);
 			
@@ -394,7 +396,7 @@ public class Continuo extends Principal{
 			else
 				{
 				System.out.println("Se realizan "+Navegaciones+" navegaciones");
-				if (Debug)
+				if (VariablesEstaticas.Debug)
 					System.out.println("Navegaciones Finales");
 				}
 			
@@ -428,7 +430,7 @@ public class Continuo extends Principal{
 				DiferenciaIIN = DiferenciaIIN+DiferenciaNIIP;
 				
 				
-				if (Debug)
+				if (VariablesEstaticas.Debug)
 					System.out.println(Arrays.toString(NavegacionGenerada.toArray()));
 				
 				
@@ -492,10 +494,10 @@ public class Continuo extends Principal{
 				}
 				
 				String BrowsingN = "Browsing->("+i+"/"+Navegaciones+")   DFA->"+DiferenciaDFANP+" NFA->"+DiferenciaNFANP+" II->"+DiferenciaNIIP ;
-				if (Debug) 
+				if (VariablesEstaticas.Debug) 
 					System.out.println(BrowsingN);
 				
-				if (!Debug) {
+				if (!VariablesEstaticas.Debug) {
 					if (i%100==0 && documentos.size()==documentosEntrada.size())
 						System.out.println(i);
 				}
@@ -590,6 +592,59 @@ public class Continuo extends Principal{
 		
 	}
 
-	
+	/**
+	 * Clase que carga el archivo
+	 * @param arString
+	 * @return
+	 */
+	protected static List<DocumentsV> Load(String pathname) {
+		List<DocumentsV> Salida=new ArrayList<DocumentsV>();
+		HashMap<Long,Long> Actuales=new HashMap<Long,Long>();
+		FileReader fr = null;
+		BufferedReader br = null;
+		Long idcounter=1l;
+		
+		try {
+			File F=new File(pathname);
+			fr = new FileReader(F);
+			br = new BufferedReader(fr);
+			String linea;
+	         while((linea=br.readLine())!=null)
+	            {
+	        	 DocumentsV DV=new DocumentsV(idcounter.longValue());
+	        	 idcounter++;
+	        	 if (VariablesEstaticas.Debug)
+	        		 System.out.println(linea);
+	             String[] lineaNE=linea.split(" ");
+	             for (String stringatt : lineaNE) {
+	            	try {
+						Long attr=Long.parseLong(stringatt);
+						Long attr2 = Actuales.get(attr);
+						if (attr2==null)
+							Actuales.put(attr, attr);
+						else
+							attr=attr2;
+						DV.getAtt().add(attr);
+					} catch (Exception e) {
+						e.printStackTrace();
+					} 
+	             }
+	             Salida.add(DV);
+	            }
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try{                    
+	            if( fr != null ){   
+	               fr.close();     
+	            }                  
+	         }catch (Exception e2){ 
+	            e2.printStackTrace();
+	         }
+		}
+		
+		return Salida;
+	}
 
 }

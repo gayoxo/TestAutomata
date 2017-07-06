@@ -33,17 +33,14 @@ public class Principal {
 	
 	
 //	private static final Float _DOWN_LIMIT = 5f; //1+_DOWN_LIMIT=f(1)
-	public static final boolean Debug=false;
-	public static final boolean DebugExtra=false;
-	public static boolean DebugTiming;
+
 //	public static boolean Ayuda=false;
 
 	/**
 	 * @param args
 	 */
-	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		DebugTiming=Debug&&DebugExtra;
+		VariablesEstaticas.DebugTiming=VariablesEstaticas.Debug&&VariablesEstaticas.DebugExtra;
 		System.out.println(Arrays.toString(args));
 		System.out.println("Loading File");
 		if (args.length==0)
@@ -126,7 +123,7 @@ public class Principal {
 		
 		
 		String Creation0 = "Creation time    DFA->"+DiferenciaDFA+" NFA->"+DiferenciaNFA;
-		if (Debug)
+		if (VariablesEstaticas.Debug)
 			System.out.println(Creation0);
 		LineasSalida.add(Creation0);
 		
@@ -243,7 +240,7 @@ public class Principal {
 			
 			NavegacionGenerada=DFAObject.getNavegacionGenerada();
 			
-			if (Debug)
+			if (VariablesEstaticas.Debug)
 				System.out.println(Arrays.toString(NavegacionGenerada.toArray()));
 
 			NFAObject.setNavegacionGenerada(NavegacionGenerada);
@@ -282,10 +279,10 @@ public class Principal {
 			}
 			
 			String BrowsingN = "Browsing->("+i+"/"+Navegaciones+")   DFA->"+DiferenciaDFANP+" NFA->"+DiferenciaNFANP;
-			if (Debug) 
+			if (VariablesEstaticas.Debug) 
 				System.out.println(BrowsingN);
 			
-			if (!Debug) {
+			if (!VariablesEstaticas.Debug) {
 				if (i%100==0)
 					System.out.println(i);
 			}
@@ -348,7 +345,7 @@ public class Principal {
 	            {
 	        	 DocumentsV DV=new DocumentsV(idcounter.longValue());
 	        	 idcounter++;
-	        	 if (Debug)
+	        	 if (VariablesEstaticas.Debug)
 	        		 System.out.println(linea);
 	             String[] lineaNE=linea.split(" ");
 	             for (String stringatt : lineaNE) {

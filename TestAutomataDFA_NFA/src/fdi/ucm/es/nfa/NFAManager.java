@@ -14,7 +14,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.Map.Entry;
 
-import fdi.ucm.es.Principal;
+import fdi.ucm.es.VariablesEstaticas;
 import fdi.ucm.es.model.DocumentsV;
 
 /**
@@ -181,7 +181,7 @@ public class NFAManager {
 		
 		Long Salida=Navega(ES,navegacion);
 		
-		if (Principal.Debug)
+		if (VariablesEstaticas.Debug)
 			System.out.println("NFA ->"+Arrays.toString(ResultadoDocs.toArray()));
 		
 		return Salida;
@@ -198,7 +198,7 @@ public class NFAManager {
 //		int TotalActual=0; 
 		for (StateNFA posibleNodo : estadoSiguiente.getActual())
 			{
-			if (Principal.DebugTiming)
+			if (VariablesEstaticas.DebugTiming)
 				System.out.println("DD: "+posibleNodo.getId()+"<->"+ Arrays.toString(posibleNodo.getDocumentosIn().toArray()));
 			totalDocRe.addAll(posibleNodo.getDocumentosIn());
 			}
@@ -359,7 +359,7 @@ public class NFAManager {
 		long EndNFAN1 = System.nanoTime();
 		long DiferenciaNFAN1 = EndNFAN1-StartNFAN1;
 		
-		if (Principal.DebugTiming)
+		if (VariablesEstaticas.DebugTiming)
 			System.out.println("TimeN Ite->"+DiferenciaNFAN1);
 
 		HashMap<Long, PosibleNodoNFA> tablaBusqueda=new HashMap<>();
@@ -403,11 +403,11 @@ public class NFAManager {
 				}
 				
 				
-				if (Principal.DebugTiming)
+				if (VariablesEstaticas.DebugTiming)
 					System.out.println("TimeN Ite2->"+DiferenciaNFAN2);
 				
 				
-				if (Principal.DebugTiming)
+				if (VariablesEstaticas.DebugTiming)
 					System.out.println("TimeN IteT->"+DiferenciaNFAN1+DiferenciaNFAN2);
 				
 				return DiferenciaNFAN1+DiferenciaNFAN2;
