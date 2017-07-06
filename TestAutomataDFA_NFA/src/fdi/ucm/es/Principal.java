@@ -40,7 +40,8 @@ public class Principal {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		VariablesEstaticas.DebugTiming=VariablesEstaticas.Debug&&VariablesEstaticas.DebugExtra;
+		VariablesEstaticas.DebugTiming=VariablesEstaticas.Debug;
+		VariablesEstaticas.DebugTiming=VariablesEstaticas.DebugTiming&&VariablesEstaticas.DebugExtra;
 		System.out.println(Arrays.toString(args));
 		System.out.println("Loading File");
 		if (args.length==0)

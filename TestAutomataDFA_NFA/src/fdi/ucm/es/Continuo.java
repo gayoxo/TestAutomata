@@ -34,7 +34,7 @@ public class Continuo{
 	
 	
 
-	private static final int _PARTIDO_CONTINUO_TOTAL = 1;
+	private static final int _PARTIDO_CONTINUO_TOTAL = 50;
 	private static int _PARTIDOCONTINUO = 10;
 
 
@@ -42,7 +42,8 @@ public class Continuo{
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		VariablesEstaticas.DebugTiming=VariablesEstaticas.Debug&&VariablesEstaticas.DebugExtra;
+		VariablesEstaticas.DebugTiming=VariablesEstaticas.Debug;
+		VariablesEstaticas.DebugTiming=VariablesEstaticas.DebugTiming&&VariablesEstaticas.DebugExtra;
 		System.out.println(Arrays.toString(args));
 		System.out.println("Loading File");
 		if (args.length==0)

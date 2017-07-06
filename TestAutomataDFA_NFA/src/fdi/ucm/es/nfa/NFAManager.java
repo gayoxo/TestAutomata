@@ -3,11 +3,11 @@
  */
 package fdi.ucm.es.nfa;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -24,11 +24,11 @@ import fdi.ucm.es.model.DocumentsV;
 public class NFAManager {
 
 	private Long idco;
-	private ArrayList<Long> NavegacionGenerada;
+	private List<Long> NavegacionGenerada;
 	private StateNFA root;
 	private int navegacion_actual;
 	
-	private ArrayList<Integer> ResultadoDocs;
+	private LinkedList<Integer> ResultadoDocs;
 	
 	public NFAManager(List<DocumentsV> documentos
 //			, List<Long> tiemposNFA
@@ -51,7 +51,7 @@ public class NFAManager {
 			{
 			StateNFA Actual = PilaProcesar.pop();
 				HashMap<Long,List<DocumentsV>> indice=GeneraIndice(Actual.getDocumentosIn());
-				List<Entry<Long, List<DocumentsV>>> listaViables=new ArrayList<Entry<Long, List<DocumentsV>>>();
+				List<Entry<Long, List<DocumentsV>>> listaViables=new LinkedList<Entry<Long, List<DocumentsV>>>();
 				for (Entry<Long, List<DocumentsV>> name: indice.entrySet())
 				{
 					Long key =name.getKey();
@@ -99,7 +99,7 @@ public class NFAManager {
 		            	List<StateNFA> ListaAc = Actual.getTransicion().get(key);
 		            	
 		            	if (ListaAc==null)
-		            		ListaAc=new ArrayList<StateNFA>();
+		            		ListaAc=new LinkedList<StateNFA>();
 		            	
 		            	ListaAc.add(Destino);
 		            	
@@ -125,7 +125,7 @@ public class NFAManager {
 					List<StateNFA> transicionAc = procesando.getTransicion().get(long1);
 					
 					if (transicionAc==null)
-						transicionAc=new ArrayList<StateNFA>();
+						transicionAc=new LinkedList<StateNFA>();
 						
 					if (!transicionAc.contains(actual))
 						{
@@ -151,7 +151,7 @@ public class NFAManager {
 				List<DocumentsV> Latt=Salida.get(documentsVatt);
 				
 				if (Latt==null)
-					Latt=new ArrayList<DocumentsV>();
+					Latt=new LinkedList<DocumentsV>();
 				
 				if (!Latt.contains(documentsV))
 					Latt.add(documentsV);
@@ -171,9 +171,9 @@ public class NFAManager {
 
 
 	public Long Navega() {
-		ArrayList<Long> navegacion=new ArrayList<Long>();
+		LinkedList<Long> navegacion=new LinkedList<Long>();
 		
-		ResultadoDocs=new ArrayList<>();
+		ResultadoDocs=new LinkedList<>();
 		navegacion_actual=0;
 		
 		EstadoNavegacionNFA ES=new EstadoNavegacionNFA(root);
@@ -189,7 +189,7 @@ public class NFAManager {
 		
 	}
 	
-	private Long Navega(EstadoNavegacionNFA estadoSiguiente, ArrayList<Long> Salida) {
+	private Long Navega(EstadoNavegacionNFA estadoSiguiente, LinkedList<Long> Salida) {
 		
 //		Integer TotalActual = CalculaDocs(estadoSiguiente.getActual());
 		
@@ -219,7 +219,7 @@ public class NFAManager {
 				for (Entry<Long, List<StateNFA>> pieza : posibleNodoNFA.getTransicion().entrySet()) {
 					
 					
-					List<StateNFA> Resultado=pieza.getValue();
+					List<StateNFA> Resultado=new LinkedList<>(pieza.getValue());
 					
 					int Total=0; 
 					for (StateNFA posibleNodo : Resultado)
@@ -230,14 +230,14 @@ public class NFAManager {
 					
 					if (Previo==null)
 					{
-					PosibleNodoNFA p=new PosibleNodoNFA(Total,pieza.getKey(),pieza.getValue());
+					PosibleNodoNFA p=new PosibleNodoNFA(Total,pieza.getKey(),Resultado);
 					cola.add(p);
 					TablaInversa.put(pieza.getKey(), p);
 					}
 					else
 					{
 						Previo.setNumeroElementos(Previo.getNumeroElementos()+Total);
-						Previo.getEstadoSiguiente().addAll(pieza.getValue());
+						Previo.getEstadoSiguiente().addAll(Resultado);
 					}
 					
 				}
@@ -248,7 +248,7 @@ public class NFAManager {
 					
 					int Total=posibleNodoNFA.getDocumentosIn().size(); 
 
-					List<StateNFA> STA=new ArrayList<StateNFA>();
+					List<StateNFA> STA=new LinkedList<StateNFA>();
 					STA.add(posibleNodoNFA);
 					
 					PosibleNodoNFA Previo = TablaInversa.get(pieza);
@@ -433,7 +433,7 @@ public class NFAManager {
 //	}
 
 
-	public void setNavegacionGenerada(ArrayList<Long> navegacionGenerada) {
+	public void setNavegacionGenerada(List<Long> navegacionGenerada) {
 		NavegacionGenerada=navegacionGenerada;
 		
 	}
