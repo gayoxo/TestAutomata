@@ -66,28 +66,32 @@ navegacion_actual=0;
 	private Long Navega(ArrayList<Long> select, ArrayList<Long> Salida) {
 	
 		
-
-		long StartDFAN1 = System.nanoTime();
-
-		List<DocumentsV> Documentos=CalculaDocs(TablaII,select);
+	List<DocumentsV> Documentos=CalculaDocs(TablaII,select);
 		
 		ResultadoDocs.add(Documentos.size());
 		
+		long StartDFAN1 = System.nanoTime();
+
 		Queue<PosibleNodoII> cola = new PriorityQueue<PosibleNodoII>();
 		
-		for (Long pieza : TablaII.keySet()) {
+		for (Entry<Long, List<DocumentsV>> pieza : TablaII.entrySet()) {
 			
-			if (!Salida.contains(pieza))
+			if (!Salida.contains(pieza.getKey()))
 			{
 				
-				ArrayList<Long> nueva=new ArrayList<>(select);
-				nueva.add(pieza);
+				List<DocumentsV> Intersect=intersec(Documentos, pieza.getValue());
+				
+				/*
+				select.add(pieza.getKey());
 			
-			List<DocumentsV> Intersect=CalculaDocs(TablaII,nueva);
+			List<DocumentsV> Intersect=CalculaDocs(TablaII,select);
+			
+			select.remove(pieza.getKey());
+			*/
 			
 				if (!Intersect.isEmpty()&&Intersect.size()<Documentos.size())
 				{
-				PosibleNodoII p=new PosibleNodoII(Intersect.size(),pieza);
+				PosibleNodoII p=new PosibleNodoII(Intersect.size(),pieza.getKey());
 				cola.add(p);
 				}
 			}
