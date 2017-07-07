@@ -209,6 +209,16 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 			
 		}
 		
+		for (Long pieza : estadoSiguiente.getBucle()) {
+			
+			List<DocumentsV> Total=estadoSiguiente.getDocumentosIn();
+			
+//			PosibleNodoDFA p=
+					new PosibleNodoDFA(Total.size(),pieza,estadoSiguiente);
+//			cola.add(p);
+			
+		}
+		
 		
 		long EndDFAN1 = System.nanoTime();
 		long DiferenciaDFAN1 = EndDFAN1-StartDFAN1;
