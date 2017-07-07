@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 
 import fdi.ucm.es.VariablesEstaticas;
 import fdi.ucm.es.model.DocumentsV;
@@ -66,20 +67,31 @@ navegacion_actual=0;
 	private Long Navega(ArrayList<Long> select, ArrayList<Long> Salida) {
 	
 		
+		long StartDFAN1 = System.nanoTime();
+		
 	List<DocumentsV> Documentos=CalculaDocs(TablaII,select);
 		
 		ResultadoDocs.add(Documentos.size());
 		
-		long StartDFAN1 = System.nanoTime();
-
 		Queue<PosibleNodoII> cola = new PriorityQueue<PosibleNodoII>();
 		
-		for (Entry<Long, List<DocumentsV>> pieza : TablaII.entrySet()) {
+		Set<Long> L=new HashSet<Long>();
+	
+		for (DocumentsV docu : Documentos) 
+			for (Long long1 : docu.getAtt()) 
+				L.add(long1);
 			
-			if (!Salida.contains(pieza.getKey()))
+		
+		
+		
+		for (Long key : L) {
+			
+			List<DocumentsV> value = TablaII.get(key);
+			
+			if (!Salida.contains(key))
 			{
 				
-				List<DocumentsV> Intersect=intersec(Documentos, pieza.getValue());
+				List<DocumentsV> Intersect=intersec(Documentos, value);
 				
 				/*
 				select.add(pieza.getKey());
@@ -88,12 +100,11 @@ navegacion_actual=0;
 			
 			select.remove(pieza.getKey());
 			*/
-			
+				PosibleNodoII p=new PosibleNodoII(Intersect.size(),key);
+				
 				if (!Intersect.isEmpty()&&Intersect.size()<Documentos.size())
-				{
-				PosibleNodoII p=new PosibleNodoII(Intersect.size(),pieza.getKey());
-				cola.add(p);
-				}
+					cola.add(p);
+				
 			}
 			
 		}
