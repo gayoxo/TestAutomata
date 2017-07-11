@@ -23,12 +23,18 @@ import fdi.ucm.es.model.DocumentsV;
  */
 public class NFAManager {
 
-	private Long idco;
-	private List<Long> NavegacionGenerada;
-	private StateNFA root;
-	private int navegacion_actual;
+	protected Long idco;
+	protected List<Long> NavegacionGenerada;
+	protected StateNFA root;
+	protected int navegacion_actual;
 	
-	private LinkedList<Integer> ResultadoDocs;
+	protected LinkedList<Integer> ResultadoDocs;
+	
+	
+	
+	public NFAManager() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public NFAManager(List<DocumentsV> documentos
 //			, List<Long> tiemposNFA
