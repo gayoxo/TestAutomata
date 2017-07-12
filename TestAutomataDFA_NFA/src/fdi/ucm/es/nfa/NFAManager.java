@@ -23,33 +23,22 @@ import fdi.ucm.es.model.DocumentsV;
  */
 public class NFAManager {
 
-	protected Long idco;
-	protected List<Long> NavegacionGenerada;
-	protected StateNFA root;
-	protected int navegacion_actual;
+	private Long idco;
+	private List<Long> NavegacionGenerada;
+	private StateNFA root;
+	private int navegacion_actual;
 	
-	protected LinkedList<Integer> ResultadoDocs;
+	private LinkedList<Integer> ResultadoDocs;
 	
 	
+
 	
-	public NFAManager() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public NFAManager(List<DocumentsV> documentos
-//			, List<Long> tiemposNFA
-			) {
+	public NFAManager(List<DocumentsV> documentos) {
 		
-//		long StartNFA = System.nanoTime();
 		
 		idco=1l;
 		Stack<StateNFA> PilaProcesar = new Stack<StateNFA>();
 		root=new StateNFA(idco.longValue(),null);
-//		long EndNFA = System.nanoTime();
-//		long DiferenciaNFA = EndNFA-StartNFA;
-//		tiemposNFA.add(DiferenciaNFA);
-		
-//		System.out.println("Creado State: "+idco.longValue());
 		root.setDocumentosIn(documentos);
 		idco++;
 		PilaProcesar.push(root);
@@ -90,9 +79,6 @@ public class NFAManager {
 		            	{
 		            	StateNFA Destino = new StateNFA(idco.longValue(),Actual);
 	            		
-//		            	long EndNFAO = System.nanoTime();
-//		        		long DiferenciaNFAO = EndNFAO-StartNFA;
-//		        		tiemposNFA.add(DiferenciaNFAO);
 		            	
 		            	idco++;
 	            		Destino.setDocumentosIn(value);
@@ -197,27 +183,21 @@ public class NFAManager {
 	
 	private Long Navega(EstadoNavegacionNFA estadoSiguiente, LinkedList<Long> Salida) {
 		
-//		Integer TotalActual = CalculaDocs(estadoSiguiente.getActual());
 		
-		HashSet<DocumentsV> totalDocRe=new HashSet<>();
-		
-		
-		long StartNFAN1 = System.nanoTime();
-		
-//		int TotalActual=0; 
-		for (StateNFA posibleNodo : estadoSiguiente.getActual())
-			{
-			if (VariablesEstaticas.DebugTiming)
-				System.out.println("DD: "+posibleNodo.getId()+"<->"+ Arrays.toString(posibleNodo.getDocumentosIn().toArray()));
-			totalDocRe.addAll(posibleNodo.getDocumentosIn());
-			}
+long StartNFAN1 = System.nanoTime();
 		
 		
-		ResultadoDocs.add(totalDocRe.size());
+		int calculaNodosIn=calculaDocs(new LinkedList<StateNFA>(estadoSiguiente.getActual()));
+		
+		
+		
+		ResultadoDocs.add(calculaNodosIn);
 		
 	
 		
-		Queue<PosibleNodoNFA> cola = new PriorityQueue<PosibleNodoNFA>();
+	Queue<PosibleNodoNFA> colaT = new PriorityQueue<PosibleNodoNFA>();
+		
+		Queue<PosibleNodoNFA> colaR = new PriorityQueue<PosibleNodoNFA>();
 		
 		if (estadoSiguiente.getActual().size()>1)	
 		{
@@ -240,7 +220,7 @@ public class NFAManager {
 					if (Previo==null)
 					{
 					PosibleNodoNFA p=new PosibleNodoNFA(Total,pieza.getKey(),Resultado);
-					cola.add(p);
+					colaT.add(p);
 					TablaInversa.put(pieza.getKey(), p);
 					}
 					else
@@ -265,7 +245,7 @@ public class NFAManager {
 					if (Previo==null)
 					{
 					PosibleNodoNFA p=new PosibleNodoNFA(Total,pieza,STA);
-					cola.add(p);
+					colaT.add(p);
 					TablaInversa.put(pieza, p);
 					}
 					else
@@ -274,71 +254,20 @@ public class NFAManager {
 						Previo.getEstadoSiguiente().add(posibleNodoNFA);
 					}
 					
-				}
-		}	
-	/*		
-		Set<Long> TransicionesPosibles=new HashSet<Long>();
-		
-		
-//		HashMap<Long, Integer> bucles=new HashMap<>();
-//		
-//		for (StateNFA estado : estadoSiguiente.getActual()) {
-//			
-//			for (Long long1 : estado.getBucle()) {
-//				Integer lists = bucles.get(estado);
-//				if (lists==null)
-//					lists=new Integer(0);
-//				lists++;
-//				bucles.put(long1, lists);
-//			}
-//		}
-//		
-		
-		for (StateNFA estado : estadoSiguiente.getActual()) 
-			{
-			TransicionesPosibles.addAll(estado.getTransicion().keySet());	
-			TransicionesPosibles.addAll(estado.getBucle());
-			}
-
-//		
-//		for (Entry<Long, Integer> estateLong : bucles.entrySet()) {
-//			if (estateLong.getValue().intValue()!=estadoSiguiente.getActual().size())
-//				TransicionesPosibles.add(estateLong.getKey());
-//		}
-		
-		
-		for (Long IdTransicion : TransicionesPosibles) {
-
-			List<StateNFA> Resultado=new ArrayList<StateNFA>();
-			for (StateNFA EstadoActual : estadoSiguiente.getActual()) {
-				if (EstadoActual.getBucle().contains(IdTransicion))
-					Resultado.add(EstadoActual);
-				else
-					{
-					List<StateNFA> NextStates = EstadoActual.getTransicion().get(IdTransicion);
-					if (NextStates!=null&&!NextStates.isEmpty())
-						Resultado.addAll(NextStates);
-					}
-			}
 					
-			
-
-			HashSet<DocumentsV> totalDocRe2=new HashSet<>();
-			
-				for (StateNFA posibleNodo : Resultado)
-					totalDocRe2.addAll(posibleNodo.getDocumentosIn());
-				
-				int NDOC = totalDocRe2.size();
-				if (NDOC!=totalDocRe.size())
-				{
-				PosibleNodoNFA p=new PosibleNodoNFA(totalDocRe2.size(),IdTransicion,Resultado);
-				cola.add(p);
+					
+					
 				}
-
-			
-			
 		}
-		*/
+		
+		
+		
+		for (PosibleNodoNFA posibleNodoNFA2 : colaT) {
+			int t=calculaDocs(posibleNodoNFA2.getEstadoSiguiente());
+			if (t!=calculaNodosIn)
+				colaR.add(posibleNodoNFA2);
+		}
+
 		}
 		
 		else
@@ -356,7 +285,7 @@ public class NFAManager {
 				
 				
 				PosibleNodoNFA p=new PosibleNodoNFA(Total,pieza.getKey(),pieza.getValue());
-				cola.add(p);
+				colaT.add(p);
 				
 			}
 		}
@@ -372,7 +301,7 @@ public class NFAManager {
 			System.out.println("TimeN Ite->"+DiferenciaNFAN1);
 
 		HashMap<Long, PosibleNodoNFA> tablaBusqueda=new HashMap<>();
-		for (PosibleNodoNFA posibleNodoNFA : cola) 
+		for (PosibleNodoNFA posibleNodoNFA : colaT) 
 			tablaBusqueda.put(posibleNodoNFA.getLongTransicion(), posibleNodoNFA);
 				
 				Long DiferenciaNFAN2 =0l;
@@ -384,23 +313,6 @@ public class NFAManager {
 				
 				PosibleNodoNFA PP=tablaBusqueda.get(transicionA);
 				
-//				HashSet<StateNFA> next=new HashSet<StateNFA>();
-//				
-//					for (StateNFA posibleNodoNFA : estadoSiguiente.getActual()) {
-//						ArrayList<StateNFA> sucession=new ArrayList<StateNFA>();
-//						if (posibleNodoNFA.getBucle().contains(transicionA))
-//							sucession.add(posibleNodoNFA);
-//						else
-//							{
-//							List<StateNFA> haciaDelante = posibleNodoNFA.getTransicion().get(transicionA);
-//							if (haciaDelante!=null)
-//								sucession.addAll(haciaDelante);
-//							}
-//						
-//						
-//							next.addAll(sucession);
-//						
-//					}
 				
 				if (PP==null)
 					System.out.println(Arrays.toString(ResultadoDocs.toArray())+"<->"+Arrays.toString(NavegacionGenerada.toArray()));
@@ -426,20 +338,7 @@ public class NFAManager {
 			}
 	
 	
-//	private int CalculaDocs(List<StateNFA> estadoSiguiente) {
-//		int Total=0; 
-//		for (StateNFA posibleNodo : estadoSiguiente)
-//			Total=Total+posibleNodo.getDocumentosIn().size();
-//		return Total;
-//	}
-//
-//
-//	private int CalculaDocs(Set<StateNFA> estadoSiguiente) {
-//		int Total=0; 
-//		for (StateNFA posibleNodo : estadoSiguiente)
-//			Total=Total+posibleNodo.getDocumentosIn().size();
-//		return Total;
-//	}
+
 
 
 	public void setNavegacionGenerada(List<Long> navegacionGenerada) {
@@ -447,29 +346,12 @@ public class NFAManager {
 		
 	}
 	
-//	private List<DocumentsV> calculaTotal(StateNFA value) {
-//		ArrayList<DocumentsV> Salida=new ArrayList<DocumentsV>();
-//		Salida.addAll(value.getDocumentosIn());
-//		for (Entry<Long, List<StateNFA>> entryHijo : value.getTransicion().entrySet()) {
-//			for (StateNFA stater : entryHijo.getValue()) {
-//
-//				
-//				List<DocumentsV> Posible=Ayuda.get(stater);
-//				if (Posible==null)
-//					{
-//					Posible=calculaTotal(stater);
-//					if (Principal.Ayuda)
-//					Ayuda.put(stater, Posible);
-//					}
-//				
-//				for (DocumentsV documentsV : Posible)
-//					if (!Salida.contains(documentsV))
-//						Salida.add(documentsV);
-//	
-//			}
-//			
-//		}
-//		return Salida;
-//	}
+	private int calculaDocs(List<StateNFA> list) {
+		HashSet<DocumentsV> totalDocRe=new HashSet<>();
+		for (StateNFA posibleNodo : list)
+			totalDocRe.addAll(posibleNodo.getDocumentosIn());
+		
+		return totalDocRe.size();
+	}
 
 }
