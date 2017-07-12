@@ -45,7 +45,7 @@ public class DFAManager {
 //	long EndDFA = System.nanoTime();
 //	long DiferenciaDFA = EndDFA-StartDFA;
 //	tiemposCreacion.add(DiferenciaDFA);
-	if (VariablesEstaticas.Debug)
+	if (VariablesEstaticas.DebugTiming)
 		System.out.println("Creado State: "+idco.longValue());
 	root.setDocumentosIn(documentos);
 	

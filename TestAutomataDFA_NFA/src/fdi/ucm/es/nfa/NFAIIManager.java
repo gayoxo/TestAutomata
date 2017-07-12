@@ -3,6 +3,7 @@
  */
 package fdi.ucm.es.nfa;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import fdi.ucm.es.model.DocumentsV;
@@ -35,74 +36,30 @@ public class NFAIIManager extends NFAManager{
 		idco++;
 		PilaProcesar.push(root);
 		
-		
-		//COSAS DIFERENTES
-		
-		/*
-		while (!PilaProcesar.isEmpty())
-			{
-			StateNFA Actual = PilaProcesar.pop();
-				HashMap<Long,List<DocumentsV>> indice=GeneraIndice(Actual.getDocumentosIn());
-				List<Entry<Long, List<DocumentsV>>> listaViables=new LinkedList<Entry<Long, List<DocumentsV>>>();
-				for (Entry<Long, List<DocumentsV>> name: indice.entrySet())
-				{
-					Long key =name.getKey();
-		            List<DocumentsV> value = name.getValue();
-		            
-		            if (value.size()==Actual.getDocumentosIn().size())
-		            	Actual.getBucle().add(key);
-		            else
-		            	listaViables.add(name);
-				}
+		for (DocumentsV doci : documentos) {
+			StateNFA Destino = new StateNFA(idco.longValue(),root);
+    		
+//        	long EndNFAO = System.nanoTime();
+//    		long DiferenciaNFAO = EndNFAO-StartNFA;
+//    		tiemposNFA.add(DiferenciaNFAO);
+        	
+        	idco++;
+        	List<DocumentsV> docYo = new ArrayList<DocumentsV>();
+        	docYo.add(doci);
+        	Destino.setDocumentosIn(docYo);
+			for (Long longT : doci.getAtt()) {
+				List<StateNFA> listaT = root.getTransicion().get(longT);
+				if (listaT==null)
+					listaT=new ArrayList<StateNFA>();
 				
-				ProcesaBucle(Actual);
+				listaT.add(Destino);
+				root.getTransicion().put(longT, listaT);
+				
+			}
+			
+			Destino.setBucle(new ArrayList<>(doci.getAtt()));
+		}
 
-				
-				HashSet<DocumentsV> procesados=new HashSet<DocumentsV>();
-				
-				Collections.shuffle(listaViables);
-				
-				while (!listaViables.isEmpty())
-				{
-					
-					Entry<Long, List<DocumentsV>> tocao=listaViables.get(0);
-					listaViables.remove(tocao);
-					
-					Long key =tocao.getKey();
-		            List<DocumentsV> value = tocao.getValue();
-		            
-		            value.removeAll(procesados);
-		            if (!value.isEmpty())
-		            	{
-		            	StateNFA Destino = new StateNFA(idco.longValue(),Actual);
-	            		
-//		            	long EndNFAO = System.nanoTime();
-//		        		long DiferenciaNFAO = EndNFAO-StartNFA;
-//		        		tiemposNFA.add(DiferenciaNFAO);
-		            	
-		            	idco++;
-	            		Destino.setDocumentosIn(value);
-
-		            	PilaProcesar.add(Destino);
-	            		
-		            	procesados.addAll(value);
-	            		
-		            	
-		            	List<StateNFA> ListaAc = Actual.getTransicion().get(key);
-		            	
-		            	if (ListaAc==null)
-		            		ListaAc=new LinkedList<StateNFA>();
-		            	
-		            	ListaAc.add(Destino);
-		            	
-	            		Actual.getTransicion().put(key, ListaAc);
-		            	}
-					
-				}
-				
-				
-				
-			}*/
 		}
 	
 

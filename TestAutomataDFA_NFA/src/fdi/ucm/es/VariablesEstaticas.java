@@ -8,7 +8,7 @@ package fdi.ucm.es;
  *
  */
 public class VariablesEstaticas {
-	public static final boolean Debug=false;
+	public static final boolean Debug=true;
 	public static final boolean DebugExtra=false;
 	public static boolean DebugTiming;
 }

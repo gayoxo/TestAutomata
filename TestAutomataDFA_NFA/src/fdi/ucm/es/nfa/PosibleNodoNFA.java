@@ -3,6 +3,7 @@
  */
 package fdi.ucm.es.nfa;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class PosibleNodoNFA implements Comparable<PosibleNodoNFA>{
 	private PosibleNodoNFA() {
 		this.numeroElementos=0;
 		this.longTransicion=0l;
-		this.estadoSiguiente=null;
+		this.estadoSiguiente=new LinkedList<StateNFA>();
 	}
 	
 	public PosibleNodoNFA(int nelements, Long transicion, List<StateNFA> estadoSiguiente) {

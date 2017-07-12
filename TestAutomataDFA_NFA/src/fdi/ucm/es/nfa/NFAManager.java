@@ -201,6 +201,9 @@ public class NFAManager {
 		
 		HashSet<DocumentsV> totalDocRe=new HashSet<>();
 		
+		
+		long StartNFAN1 = System.nanoTime();
+		
 //		int TotalActual=0; 
 		for (StateNFA posibleNodo : estadoSiguiente.getActual())
 			{
@@ -212,7 +215,7 @@ public class NFAManager {
 		
 		ResultadoDocs.add(totalDocRe.size());
 		
-		long StartNFAN1 = System.nanoTime();
+	
 		
 		Queue<PosibleNodoNFA> cola = new PriorityQueue<PosibleNodoNFA>();
 		
