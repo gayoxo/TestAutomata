@@ -101,7 +101,7 @@ public class NFAIIManager {
 		Long Salida=Navega(ES,navegacion);
 		
 		if (VariablesEstaticas.Debug)
-			System.out.println("NFA ->"+Arrays.toString(ResultadoDocs.toArray()));
+			System.out.println("NFAII ->"+Arrays.toString(ResultadoDocs.toArray()));
 		
 		return Salida;
 

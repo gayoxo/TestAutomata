@@ -108,9 +108,10 @@ public class NFAManager {
 
 	private void ProcesaBucle(StateNFA actual) {
 		StateNFA procesando = actual.getPadre();
-		List<Long> bucle = actual.getBucle();
+		List<Long> bucle = new LinkedList<Long>(actual.getBucle());
 		while (procesando!=null)
 		{
+			List<Long> borrar=new LinkedList<Long>();
 			for (Long long1 : bucle) {
 				if (!procesando.getBucle().contains(long1))
 					{
@@ -125,7 +126,11 @@ public class NFAManager {
 						procesando.getTransicion().put(long1, transicionAc);
 						}
 					}
+				else
+					borrar.add(long1);
+	
 			}
+			bucle.removeAll(borrar);
 			procesando=procesando.getPadre();
 		}
 	}
@@ -347,11 +352,13 @@ long StartNFAN1 = System.nanoTime();
 	}
 	
 	private int calculaDocs(List<StateNFA> list) {
-		HashSet<DocumentsV> totalDocRe=new HashSet<>();
-		for (StateNFA posibleNodo : list)
-			totalDocRe.addAll(posibleNodo.getDocumentosIn());
+		int Salida=0;
 		
-		return totalDocRe.size();
+		
+		for (StateNFA posibleNodo : list)
+			Salida=Salida+posibleNodo.getDocumentosIn().size();
+		
+		return Salida;
 	}
 
 }
