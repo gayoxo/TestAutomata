@@ -361,7 +361,7 @@ public class Continuo{
 				FilaConstruccion++;
 				
 				XSSFCell  celda00N = filaN.createCell(0);
-				celda00N.setCellValue((IteracionDocs*100)/documentosEntrada.size());
+				celda00N.setCellValue((IteracionDocs*100)/documentosEntrada.size()+"%");
 
 				XSSFCell  celda0N = filaN.createCell(1);
 				celda0N.setCellValue(DiferenciaDFA);
