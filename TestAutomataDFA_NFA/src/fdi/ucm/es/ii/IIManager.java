@@ -232,8 +232,8 @@ navegacion_actual=0;
 		return Salida;
 	}
 
-	public Long getTotalTransitions(boolean buclesConteo) {
-		return 0l;
+	public String getTotalTransitions(boolean buclesConteo) {
+		return "NaN";
 	}
 
 

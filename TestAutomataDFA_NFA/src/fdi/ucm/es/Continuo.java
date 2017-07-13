@@ -170,6 +170,18 @@ public class Continuo{
 			XSSFCell  celda3filaNodes = filaConstrucccion.createCell(8);
 			celda3filaNodes.setCellValue("NFAII Nodes");
 			
+			XSSFCell celda0Transition = filaConstrucccion.createCell(9);
+			celda0Transition.setCellValue("DFA Transitions");
+			
+			XSSFCell  celda1Transition = filaConstrucccion.createCell(10);
+			celda1Transition.setCellValue("NFA Transitions");
+			
+			XSSFCell  celda2Transition = filaConstrucccion.createCell(11);
+			celda2Transition.setCellValue("II Size");
+			
+			XSSFCell  celda3Transition = filaConstrucccion.createCell(12);
+			celda3Transition.setCellValue("NFAII Transitions");
+			
 
 			
 			
@@ -262,10 +274,14 @@ public class Continuo{
 			long EndDFA = System.nanoTime();
 			long DiferenciaDFA = EndDFA-StartDFA;
 			
-			String NodosDFA="DFA->"+DFAObject.getIdco();
+			
+			
+			String TotalDFAT="NaN";
 			if (VariablesEstaticas.TR)
-				NodosDFA = NodosDFA+" TR->" + DFAObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO) ;
+				TotalDFAT =  Long.toString(DFAObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO)) ;
 				
+			
+			String NodosDFA="DFA->"+DFAObject.getIdco()+" TR->" +TotalDFAT ;
 			System.out.println(NodosDFA);
 			LineasSalida.add(NodosDFA);
 			
@@ -280,9 +296,13 @@ public class Continuo{
 			long EndNFA = System.nanoTime();
 			long DiferenciaNFA = EndNFA-StartNFA;
 			
-			String NodosNFA = "NFA->"+NFAObject.getIdco();
+			
+			String TotalNFAT="NaN";
 			if (VariablesEstaticas.TR)
-				NodosNFA = NodosNFA+" TR->" + NFAObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO);
+				TotalNFAT =  Long.toString( NFAObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO));
+			
+			
+			String NodosNFA = "NFA->"+NFAObject.getIdco()+" TR->" +TotalNFAT ;
 			System.out.println(NodosNFA);
 			LineasSalida.add(NodosNFA);
 			
@@ -295,9 +315,9 @@ public class Continuo{
 			long EndII = System.nanoTime();
 			long DiferenciaII = EndII-StartII;
 			
-			String NodosII = "II->"+IIObject.getIdco();
-			if (VariablesEstaticas.TR)
-				NodosII = NodosII+" TR->" + IIObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO);
+			
+			String TotalIIT="NaN";
+			String NodosII = "II->"+IIObject.getIdco()+" TR->" +TotalIIT;
 			System.out.println(NodosII);
 			LineasSalida.add(NodosII);
 			
@@ -310,9 +330,12 @@ public class Continuo{
 			long EndNFAII = System.nanoTime();
 			long DiferenciaNFAII = EndNFAII-StartNFAII;
 			
-			String NodosNFAII = "NFAII->"+NFAIIObject.getIdco();
+			
+			String TotalNFAIIT="NaN";
 			if (VariablesEstaticas.TR)
-				NodosNFAII = NodosNFAII+" TR->" + NFAIIObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO);
+				TotalNFAIIT =  Long.toString(NFAIIObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO));
+			
+			String NodosNFAII = "NFAII->"+NFAIIObject.getIdco()+" TR->" +TotalNFAIIT;
 			System.out.println(NodosNFAII);
 			LineasSalida.add(NodosNFAII);
 			
@@ -397,6 +420,18 @@ public class Continuo{
 				
 				XSSFCell  celda3DT = filaN.createCell(8);
 				celda3DT.setCellValue(NFAIIObject.getIdco());
+				
+				XSSFCell  celda0TT = filaN.createCell(9);
+				celda0TT.setCellValue(TotalDFAT);
+								
+				XSSFCell  celda1TT = filaN.createCell(10);
+				celda1TT.setCellValue(TotalNFAT);
+				
+				XSSFCell  celda2TT = filaN.createCell(11);
+				celda2TT.setCellValue(TotalIIT);
+				
+				XSSFCell  celda3TT = filaN.createCell(12);
+				celda3TT.setCellValue(TotalNFAIIT);
 				
 				
 			}

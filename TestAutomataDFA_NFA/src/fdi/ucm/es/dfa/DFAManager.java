@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -275,19 +276,24 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 	
 	public Long getTotalTransitions(boolean bucles){
 		Stack<StateDFA> pendientes=new Stack<>();
+		List<StateDFA> procesados=new LinkedList<>();
 		pendientes.add(root);
 		Long Salida=0l;
 				
 		while(!pendientes.isEmpty())
 		{
 			StateDFA act=pendientes.pop();	
-			for (Entry<Long, StateDFA> stateDFA : act.getTransicion().entrySet()) {
-				Salida++;
-				pendientes.add(stateDFA.getValue());
+			if (!procesados.contains(act))
+			{
+				procesados.add(act);
+				for (Entry<Long, StateDFA> stateDFA : act.getTransicion().entrySet()) {
+					Salida++;
+					pendientes.add(stateDFA.getValue());
+				}
+				
+				if (bucles)
+					Salida=Salida+act.getBucle().size();
 			}
-			
-			if (bucles)
-				Salida=Salida+act.getBucle().size();
 		}
 				return Salida;
 		
