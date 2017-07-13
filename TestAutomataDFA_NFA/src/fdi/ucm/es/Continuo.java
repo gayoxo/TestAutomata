@@ -176,10 +176,7 @@ public class Continuo{
 			XSSFCell  celda1Transition = filaConstrucccion.createCell(10);
 			celda1Transition.setCellValue("NFA Transitions");
 			
-			XSSFCell  celda2Transition = filaConstrucccion.createCell(11);
-			celda2Transition.setCellValue("II Size");
-			
-			XSSFCell  celda3Transition = filaConstrucccion.createCell(12);
+			XSSFCell  celda3Transition = filaConstrucccion.createCell(11);
 			celda3Transition.setCellValue("NFAII Transitions");
 			
 
@@ -276,9 +273,9 @@ public class Continuo{
 			
 			
 			
-			String TotalDFAT="NaN";
+			Long TotalDFAT=0l;
 			if (VariablesEstaticas.TR)
-				TotalDFAT =  Long.toString(DFAObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO)) ;
+				TotalDFAT =  DFAObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO) ;
 				
 			
 			String NodosDFA="DFA->"+DFAObject.getIdco()+" TR->" +TotalDFAT ;
@@ -297,9 +294,9 @@ public class Continuo{
 			long DiferenciaNFA = EndNFA-StartNFA;
 			
 			
-			String TotalNFAT="NaN";
+			Long TotalNFAT=0l;
 			if (VariablesEstaticas.TR)
-				TotalNFAT =  Long.toString( NFAObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO));
+				TotalNFAT =  NFAObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO);
 			
 			
 			String NodosNFA = "NFA->"+NFAObject.getIdco()+" TR->" +TotalNFAT ;
@@ -316,8 +313,7 @@ public class Continuo{
 			long DiferenciaII = EndII-StartII;
 			
 			
-			String TotalIIT="NaN";
-			String NodosII = "II->"+IIObject.getIdco()+" TR->" +TotalIIT;
+			String NodosII = "II->"+IIObject.getIdco()+" TR->NaN";
 			System.out.println(NodosII);
 			LineasSalida.add(NodosII);
 			
@@ -331,9 +327,9 @@ public class Continuo{
 			long DiferenciaNFAII = EndNFAII-StartNFAII;
 			
 			
-			String TotalNFAIIT="NaN";
+			Long TotalNFAIIT=0l;
 			if (VariablesEstaticas.TR)
-				TotalNFAIIT =  Long.toString(NFAIIObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO));
+				TotalNFAIIT =  NFAIIObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO);
 			
 			String NodosNFAII = "NFAII->"+NFAIIObject.getIdco()+" TR->" +TotalNFAIIT;
 			System.out.println(NodosNFAII);
@@ -428,10 +424,8 @@ public class Continuo{
 				celda1TT.setCellValue(TotalNFAT);
 				
 				XSSFCell  celda2TT = filaN.createCell(11);
-				celda2TT.setCellValue(TotalIIT);
+				celda2TT.setCellValue(TotalNFAIIT);
 				
-				XSSFCell  celda3TT = filaN.createCell(12);
-				celda3TT.setCellValue(TotalNFAIIT);
 				
 				
 			}
