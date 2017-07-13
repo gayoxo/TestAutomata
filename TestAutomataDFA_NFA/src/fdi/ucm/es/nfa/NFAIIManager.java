@@ -285,5 +285,28 @@ public class NFAIIManager {
 		NavegacionGenerada=navegacionGenerada;
 		
 	}
+	
+	public Long getTotalTransitions(boolean bucles){
+		Stack<StateNFA> pendientes=new Stack<>();
+		pendientes.add(root);
+		Long Salida=0l;
+				
+		while(!pendientes.isEmpty())
+		{
+			StateNFA act=pendientes.pop();	
+			for (Entry<Long, List<StateNFA>> entrystateDFA : act.getTransicion().entrySet()) 
+				for (StateNFA stateNFA : entrystateDFA.getValue()) {
+					Salida++;
+					pendientes.add(stateNFA);
+			}
+			
+			if (bucles)
+				Salida=Salida+act.getBucle().size();
+		}
+				return Salida;
+		
+	}
+
+
 
 }

@@ -37,6 +37,7 @@ public class Continuo{
 
 	private static final int _PARTIDO_CONTINUO_TOTAL = 10;
 	private static final int _PARTIDO_CONTINUO_TOTA_SIMULACIONES_NFA = 50;
+
 	private static int _PARTIDOCONTINUO = 10;
 
 
@@ -261,7 +262,10 @@ public class Continuo{
 			long EndDFA = System.nanoTime();
 			long DiferenciaDFA = EndDFA-StartDFA;
 			
-			String NodosDFA = "DFA->"+DFAObject.getIdco();
+			String NodosDFA="DFA->"+DFAObject.getIdco();
+			if (VariablesEstaticas.TR)
+				NodosDFA = NodosDFA+" TR->" + DFAObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO) ;
+				
 			System.out.println(NodosDFA);
 			LineasSalida.add(NodosDFA);
 			
@@ -277,6 +281,8 @@ public class Continuo{
 			long DiferenciaNFA = EndNFA-StartNFA;
 			
 			String NodosNFA = "NFA->"+NFAObject.getIdco();
+			if (VariablesEstaticas.TR)
+				NodosNFA = NodosNFA+" TR->" + NFAObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO);
 			System.out.println(NodosNFA);
 			LineasSalida.add(NodosNFA);
 			
@@ -290,6 +296,8 @@ public class Continuo{
 			long DiferenciaII = EndII-StartII;
 			
 			String NodosII = "II->"+IIObject.getIdco();
+			if (VariablesEstaticas.TR)
+				NodosII = NodosII+" TR->" + IIObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO);
 			System.out.println(NodosII);
 			LineasSalida.add(NodosII);
 			
@@ -303,6 +311,8 @@ public class Continuo{
 			long DiferenciaNFAII = EndNFAII-StartNFAII;
 			
 			String NodosNFAII = "NFAII->"+NFAIIObject.getIdco();
+			if (VariablesEstaticas.TR)
+				NodosNFAII = NodosNFAII+" TR->" + NFAIIObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO);
 			System.out.println(NodosNFAII);
 			LineasSalida.add(NodosNFAII);
 			

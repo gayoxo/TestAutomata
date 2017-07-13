@@ -16,6 +16,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
+import java.util.Stack;
 
 import fdi.ucm.es.VariablesEstaticas;
 import fdi.ucm.es.model.DocumentsV;
@@ -272,6 +273,25 @@ Queue<PosibleNodoDFA> cola = new PriorityQueue<PosibleNodoDFA>();
 		return NavegacionGenerada;
 	}
 	
+	public Long getTotalTransitions(boolean bucles){
+		Stack<StateDFA> pendientes=new Stack<>();
+		pendientes.add(root);
+		Long Salida=0l;
+				
+		while(!pendientes.isEmpty())
+		{
+			StateDFA act=pendientes.pop();	
+			for (Entry<Long, StateDFA> stateDFA : act.getTransicion().entrySet()) {
+				Salida++;
+				pendientes.add(stateDFA.getValue());
+			}
+			
+			if (bucles)
+				Salida=Salida+act.getBucle().size();
+		}
+				return Salida;
+		
+	}
 	
 
 }
