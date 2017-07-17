@@ -4,7 +4,7 @@
 package fdi.ucm.es.nfa;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -46,7 +46,15 @@ public class NFAManager {
 			{
 			StateNFA Actual = PilaProcesar.pop();
 				HashMap<Long,List<DocumentsV>> indice=GeneraIndice(Actual.getDocumentosIn());
-				List<Entry<Long, List<DocumentsV>>> listaViables=new LinkedList<Entry<Long, List<DocumentsV>>>();
+				PriorityQueue<Entry<Long, List<DocumentsV>>> listaViables=new PriorityQueue<Entry<Long, List<DocumentsV>>>(new Comparator<Entry<Long, List<DocumentsV>>>() {
+
+					@Override
+					public int compare(Entry<Long, List<DocumentsV>> x, Entry<Long, List<DocumentsV>> y) {
+						return (x.getValue().size() - y.getValue().size());
+					}
+					
+					
+				});
 				for (Entry<Long, List<DocumentsV>> name: indice.entrySet())
 				{
 					Long key =name.getKey();
@@ -63,12 +71,15 @@ public class NFAManager {
 				
 				HashSet<DocumentsV> procesados=new HashSet<DocumentsV>();
 				
-				Collections.shuffle(listaViables);
+				
+				//TU
+				//Collections.shuffle(listaViables);
 				
 				while (!listaViables.isEmpty())
 				{
 					
-					Entry<Long, List<DocumentsV>> tocao=listaViables.get(0);
+					
+					Entry<Long, List<DocumentsV>> tocao=listaViables.poll();
 					listaViables.remove(tocao);
 					
 					Long key =tocao.getKey();
