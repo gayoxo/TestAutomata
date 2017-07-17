@@ -82,7 +82,7 @@ public class NFAManager {
 					
 					
 					Entry<Long, List<DocumentsV>> tocao=listaViables.poll();
-				//	listaViables.remove(tocao);
+					listaViables.remove(tocao);
 					
 					Long key =tocao.getKey();
 		            List<DocumentsV> value = tocao.getValue();
