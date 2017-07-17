@@ -4,6 +4,7 @@
 package fdi.ucm.es.nfa;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,15 +47,7 @@ public class NFAManager {
 			{
 			StateNFA Actual = PilaProcesar.pop();
 				HashMap<Long,List<DocumentsV>> indice=GeneraIndice(Actual.getDocumentosIn());
-				PriorityQueue<Entry<Long, List<DocumentsV>>> listaViables=new PriorityQueue<Entry<Long, List<DocumentsV>>>(new Comparator<Entry<Long, List<DocumentsV>>>() {
-
-					@Override
-					public int compare(Entry<Long, List<DocumentsV>> x, Entry<Long, List<DocumentsV>> y) {
-						return (y.getValue().size() - x.getValue().size());
-					}
-					
-					
-				});
+				LinkedList<Entry<Long, List<DocumentsV>>> listaViables=new LinkedList<Entry<Long, List<DocumentsV>>>();
 				for (Entry<Long, List<DocumentsV>> name: indice.entrySet())
 				{
 					Long key =name.getKey();
@@ -72,6 +65,15 @@ public class NFAManager {
 				HashSet<DocumentsV> procesados=new HashSet<DocumentsV>();
 				
 				
+				Collections.sort(listaViables,new Comparator<Entry<Long, List<DocumentsV>>>() {
+
+					@Override
+					public int compare(Entry<Long, List<DocumentsV>> x, Entry<Long, List<DocumentsV>> y) {
+						return (y.getValue().size() - x.getValue().size());
+					}
+					
+					
+				});
 				//TU
 				//Collections.shuffle(listaViables);
 				
@@ -80,7 +82,7 @@ public class NFAManager {
 					
 					
 					Entry<Long, List<DocumentsV>> tocao=listaViables.poll();
-					listaViables.remove(tocao);
+				//	listaViables.remove(tocao);
 					
 					Long key =tocao.getKey();
 		            List<DocumentsV> value = tocao.getValue();
