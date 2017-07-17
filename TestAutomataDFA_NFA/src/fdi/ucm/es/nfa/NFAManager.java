@@ -71,7 +71,10 @@ public class NFAManager {
 
 					@Override
 					public int compare(Entry<Long, List<DocumentsV>> x, Entry<Long, List<DocumentsV>> y) {
-						return x.getValue().size() < y.getValue().size() ? 1 : x.getValue().size() == y.getValue().size() ? 0 : -1;
+						if (VariablesEstaticas.ASCNFA_)
+							return x.getValue().size() < y.getValue().size() ? 1 : x.getValue().size() == y.getValue().size() ? 0 : -1;
+						else
+							return x.getValue().size() < y.getValue().size() ? -1 : x.getValue().size() == y.getValue().size() ? 0 : 1;
 						
 					}
 					
@@ -127,11 +130,14 @@ public class NFAManager {
 
 	private void ProcesaBucle(StateNFA actual) {
 		StateNFA procesando = actual.getPadre();
+	//	StateNFA Padre=actual;
 		List<Long> bucle = new LinkedList<Long>(actual.getBucle());
 		while (procesando!=null)
 		{
 			List<Long> borrar=new LinkedList<Long>();
 			for (Long long1 : bucle) {
+				
+				
 				if (!procesando.getBucle().contains(long1))
 					{
 					List<StateNFA> transicionAc = procesando.getTransicion().get(long1);
@@ -382,17 +388,33 @@ long StartNFAN1 = System.nanoTime();
 	
 	public Long getTotalTransitions(boolean bucles){
 		Stack<StateNFA> pendientes=new Stack<>();
+		HashSet<StateNFA> procesados=new HashSet<StateNFA>();
 		pendientes.add(root);
+		procesados.add(root);
 		Long Salida=0l;
 				
 		while(!pendientes.isEmpty())
 		{
+			
 			StateNFA act=pendientes.pop();	
+			
+			
+			if (VariablesEstaticas.Debug)
+				System.out.println("["+act.getId()+"]");
+			
 			for (Entry<Long, List<StateNFA>> entrystateDFA : act.getTransicion().entrySet()) 
 				for (StateNFA stateNFA : entrystateDFA.getValue()) {
 					Salida++;
-					pendientes.add(stateNFA);
-			}
+					
+					if (!procesados.contains(stateNFA))
+						{
+							pendientes.add(stateNFA);
+							procesados.add(stateNFA);
+						}
+						
+					if (VariablesEstaticas.Debug)
+						System.out.println("["+act.getId()+"]->"+entrystateDFA.getKey()+"->["+stateNFA.getId()+"]");
+				}
 			
 			if (bucles)
 				Salida=Salida+act.getBucle().size();

@@ -16,5 +16,7 @@ public class VariablesEstaticas {
 	public static boolean SHUFFLE=true;
 	
 	public static boolean ordenASCNFA=true;
+	public static boolean ASCNFA_=true;
+	
 	
 }
