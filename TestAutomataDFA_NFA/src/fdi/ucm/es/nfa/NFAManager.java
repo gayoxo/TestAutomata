@@ -50,7 +50,7 @@ public class NFAManager {
 
 					@Override
 					public int compare(Entry<Long, List<DocumentsV>> x, Entry<Long, List<DocumentsV>> y) {
-						return (x.getValue().size() - y.getValue().size());
+						return (y.getValue().size() - x.getValue().size());
 					}
 					
 					
