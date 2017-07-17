@@ -331,6 +331,7 @@ public class Continuo{
 			
 			
 			Long TotalNFAIIT=0l;
+			
 			if (VariablesEstaticas.TR)
 				TotalNFAIIT =  NFAIIObject.getTotalTransitions(VariablesEstaticas.BUCLES_CONTEO);
 			

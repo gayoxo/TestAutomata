@@ -65,23 +65,29 @@ public class NFAManager {
 				HashSet<DocumentsV> procesados=new HashSet<DocumentsV>();
 				
 				
-				Collections.sort(listaViables,new Comparator<Entry<Long, List<DocumentsV>>>() {
+				if (VariablesEstaticas.ordenASCNFA)
+				{
+					Collections.sort(listaViables,new Comparator<Entry<Long, List<DocumentsV>>>() {
 
 					@Override
 					public int compare(Entry<Long, List<DocumentsV>> x, Entry<Long, List<DocumentsV>> y) {
-						return (y.getValue().size() - x.getValue().size());
+						return x.getValue().size() < y.getValue().size() ? 1 : x.getValue().size() == y.getValue().size() ? 0 : -1;
+						
 					}
 					
 					
-				});
-				//TU
-				//Collections.shuffle(listaViables);
+					});
+				}else
+				{
+					Collections.shuffle(listaViables);
+				}
+				
 				
 				while (!listaViables.isEmpty())
 				{
 					
 					
-					Entry<Long, List<DocumentsV>> tocao=listaViables.poll();
+					Entry<Long, List<DocumentsV>> tocao=listaViables.get(0);
 					listaViables.remove(tocao);
 					
 					Long key =tocao.getKey();
@@ -395,4 +401,7 @@ long StartNFAN1 = System.nanoTime();
 		
 	}
 
+	
+	
+	
 }

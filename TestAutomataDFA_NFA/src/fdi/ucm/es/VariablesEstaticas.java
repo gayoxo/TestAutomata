@@ -14,4 +14,7 @@ public class VariablesEstaticas {
 	public static final boolean TR = true;
 	public static boolean DebugTiming;
 	public static boolean SHUFFLE=true;
+	
+	public static boolean ordenASCNFA=true;
+	
 }
