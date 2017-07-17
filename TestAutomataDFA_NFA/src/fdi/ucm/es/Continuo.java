@@ -54,7 +54,10 @@ public class Continuo{
 		String arString=args[0];
 		List<DocumentsV> Documentos=Load(arString);
 		System.out.println("File Loaded");
-		Collections.shuffle(Documentos);
+	
+		if (VariablesEstaticas.SHUFFLE)
+			Collections.shuffle(Documentos);
+		
 		long Start = System.nanoTime();	
 		Simulation(Documentos,arString);
 		long End = System.nanoTime();
@@ -343,10 +346,10 @@ public class Continuo{
 			
 			
 			
-			long DiferenciaDFAN=DiferenciaDFA;
-			long DiferenciaNFAN=DiferenciaNFA;
-			long DiferenciaIIN=DiferenciaII;
-			long DiferenciaNFAIIN=DiferenciaNFAII;
+			long DiferenciaDFAN=0l;
+			long DiferenciaNFAN=0l;
+			long DiferenciaIIN=0l;
+			long DiferenciaNFAIIN=0l;
 
 			if (documentos.size()==documentosEntrada.size())
 			{
