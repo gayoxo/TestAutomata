@@ -51,18 +51,23 @@ public class Continuo{
 		System.out.println("Loading File");
 		if (args.length==0)
 			System.exit(1);
-		String arString=args[0];
-		List<DocumentsV> Documentos=Load(arString);
-		System.out.println("File Loaded");
-	
-		if (VariablesEstaticas.SHUFFLE)
-			Collections.shuffle(Documentos);
 		
-		long Start = System.nanoTime();	
-		Simulation(Documentos,arString);
-		long End = System.nanoTime();
-		long Diferencia = End-Start;
-		System.out.println("Simulation End time->"+Diferencia);
+		for (String file : args) {
+			String arString=file;
+			List<DocumentsV> Documentos=Load(arString);
+			System.out.println("File Loaded");
+		
+			if (VariablesEstaticas.SHUFFLE)
+				Collections.shuffle(Documentos);
+			
+			long Start = System.nanoTime();	
+			Simulation(Documentos,arString);
+			long End = System.nanoTime();
+			long Diferencia = End-Start;
+			System.out.println("Simulation End time->"+Diferencia);
+		}
+		
+		
 	}
 
 	/**

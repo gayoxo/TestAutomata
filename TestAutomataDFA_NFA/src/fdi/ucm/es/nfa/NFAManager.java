@@ -24,12 +24,12 @@ import fdi.ucm.es.model.DocumentsV;
  */
 public class NFAManager {
 
-	private Long idco;
-	private List<Long> NavegacionGenerada;
-	private StateNFA root;
-	private int navegacion_actual;
+	protected Long idco;
+	protected List<Long> NavegacionGenerada;
+	protected StateNFA root;
+	protected int navegacion_actual;
 	
-	private LinkedList<Integer> ResultadoDocs;
+	protected LinkedList<Integer> ResultadoDocs;
 	
 	
 
@@ -128,6 +128,11 @@ public class NFAManager {
 		}
 	
 
+	public NFAManager() {
+		
+	}
+
+
 	private void ProcesaBucle(StateNFA actual) {
 		StateNFA procesando = actual.getPadre();
 	//	StateNFA Padre=actual;
@@ -211,7 +216,7 @@ public class NFAManager {
 		
 	}
 	
-	private Long Navega(EstadoNavegacionNFA estadoSiguiente, LinkedList<Long> Salida) {
+	protected Long Navega(EstadoNavegacionNFA estadoSiguiente, LinkedList<Long> Salida) {
 		
 		
 long StartNFAN1 = System.nanoTime();
@@ -376,7 +381,7 @@ long StartNFAN1 = System.nanoTime();
 		
 	}
 	
-	private int calculaDocs(List<StateNFA> list) {
+	protected int calculaDocs(List<StateNFA> list) {
 		int Salida=0;
 		
 		
