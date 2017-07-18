@@ -384,10 +384,10 @@ public class Continuo{
 				celda2IN.setCellValue(DiferenciaIIN);
 				
 				XSSFCell  celda3I = filaN.createCell(8);
-				celda3I.setCellValue(DiferenciaII);
+				celda3I.setCellValue(DiferenciaNFAII);
 				
 				XSSFCell  celda3IN = filaN.createCell(9);
-				celda3IN.setCellValue(DiferenciaIIN);
+				celda3IN.setCellValue(DiferenciaNFAIIN);
 				
 			}
 			
