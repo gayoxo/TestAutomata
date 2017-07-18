@@ -17,6 +17,7 @@ public class VariablesEstaticas {
 	
 	public static boolean ordenASCNFA=true;
 	public static boolean ASCNFA_=true;
+	public static boolean IINAV=false;
 	
 	
 }

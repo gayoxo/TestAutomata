@@ -273,9 +273,7 @@ public class Continuo{
 			
 			long StartDFA = System.nanoTime();
 			DFAManager DFAObject = 
-					new DFAManager(documentos
-//							,TiemposDFA
-							);
+					new DFAManager(documentos);
 			long EndDFA = System.nanoTime();
 			long DiferenciaDFA = EndDFA-StartDFA;
 			
@@ -290,14 +288,11 @@ public class Continuo{
 			System.out.println(NodosDFA);
 			LineasSalida.add(NodosDFA);
 			
-			
-//			List<Long> TiemposNFA=new ArrayList<Long>();
+
 			
 			long StartNFA = System.nanoTime();
 			NFAManager NFAObject = 
-					new NFAManager(documentos
-//							,TiemposNFA
-							);
+					new NFAManager(documentos);
 			long EndNFA = System.nanoTime();
 			long DiferenciaNFA = EndNFA-StartNFA;
 			
@@ -312,25 +307,27 @@ public class Continuo{
 			LineasSalida.add(NodosNFA);
 			
 			
+			long DiferenciaII=0l;
+			long IIidco=0l;
+			IIManager IIObject=null;
+			if (VariablesEstaticas.IINAV)
+			{
 			long StartII = System.nanoTime();
-			IIManager IIObject = 
-					new IIManager(documentos
-//							,TiemposNFA
-							);
+			IIObject = 
+					new IIManager(documentos);
 			long EndII = System.nanoTime();
-			long DiferenciaII = EndII-StartII;
+			 DiferenciaII = EndII-StartII;
+			 IIidco= IIObject.getIdco();
+			}
 			
-			
-			String NodosII = "II->"+IIObject.getIdco()+" TR->NaN";
+			String NodosII = "II->"+IIidco+" TR->NaN";
 			System.out.println(NodosII);
 			LineasSalida.add(NodosII);
 			
 			
 			long StartNFAII = System.nanoTime();
 			NFAIIManager NFAIIObject = 
-					new NFAIIManager(documentos
-//							,TiemposNFA
-							);
+					new NFAIIManager(documentos);
 			long EndNFAII = System.nanoTime();
 			long DiferenciaNFAII = EndNFAII-StartNFAII;
 			
@@ -421,7 +418,7 @@ public class Continuo{
 				celda1DT.setCellValue(NFAObject.getIdco());
 				
 				XSSFCell  celda2DT = filaN.createCell(7);
-				celda2DT.setCellValue(IIObject.getIdco());
+				celda2DT.setCellValue(IIidco);
 				
 				XSSFCell  celda3DT = filaN.createCell(8);
 				celda3DT.setCellValue(NFAIIObject.getIdco());
@@ -511,12 +508,14 @@ public class Continuo{
 				long DiferenciaNFANP=NFAObject.Navega();
 				DiferenciaNFAN = DiferenciaNFAN+DiferenciaNFANP;
 				
-				
+				long DiferenciaNIIP=0l;
+				if (VariablesEstaticas.IINAV&&IIObject!=null)
+				{
 				IIObject.setNavegacionGenerada(NavegacionGenerada);
 				
-				long DiferenciaNIIP=IIObject.Navega();
+				DiferenciaNIIP=IIObject.Navega();
 				DiferenciaIIN = DiferenciaIIN+DiferenciaNIIP;
-				
+				}
 				
 				NFAIIObject.setNavegacionGenerada(NavegacionGenerada);
 				
@@ -671,13 +670,6 @@ public class Continuo{
 		        for (String cell : LineasSalida) {
 		        	 bw.write(cell+"\n");
 				}
-//		        if(archivo.exists()) {
-//		            bw = new BufferedWriter(new FileWriter(archivo));
-//		            bw.write("El fichero de texto ya estaba creado.");
-//		        } else {
-//		            bw = new BufferedWriter(new FileWriter(archivo));
-//		            bw.write("Acabo de crear el fichero de texto.");
-//		        }
 		        bw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
