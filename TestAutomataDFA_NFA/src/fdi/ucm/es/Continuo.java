@@ -54,6 +54,7 @@ public class Continuo{
 		
 		for (String file : args) {
 			String arString=file;
+			System.out.println(arString);
 			List<DocumentsV> Documentos=Load(arString);
 			System.out.println("File Loaded");
 		
